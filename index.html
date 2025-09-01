@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OmniTools Suite</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,12 +19,13 @@
             },
         }
     </script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- ES Module Import Map -->
     <script type="importmap">
     {
       "imports": {
-        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0",
         "react": "https://aistudiocdn.com/react@^19.1.1",
         "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client"
       }
@@ -31,137 +33,29 @@
     </script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body>
+<body class="bg-slate-100 dark:bg-slate-900">
     <div id="root"></div>
+
+    <!-- Application Script -->
     <script type="text/babel" data-type="module">
         import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
         import ReactDOM from 'react-dom/client';
-        import { GoogleGenAI } from "@google/genai";
 
-        // --- START OF adsConfig.ts ---
+        // --- adsConfig.ts ---
         const adsConfig = {
           topBanner: 'YOUR_TOP_BANNER_AD_UNIT_ID',
           bottomBanner: 'YOUR_BOTTOM_BANNER_AD_UNIT_ID',
           popup: 'YOUR_POPUP_AD_UNIT_ID',
         };
-        // --- END OF adsConfig.ts ---
 
-        // --- START OF services/geminiService.ts ---
-        let ai = null;
-
-        const initializeGemini = (apiKey) => {
-          if (!apiKey) {
-            ai = null;
-            return;
-          }
-          ai = new GoogleGenAI({ apiKey });
-        };
-
-        const getAiClient = () => {
-          if (!ai) {
-            throw new Error("Gemini API key not set or invalid. Please set your key in the sidebar.");
-          }
-          return ai;
-        };
-
-        const reviewCode = async (code, language) => {
-          const prompt = `
-            As an expert senior software engineer, please perform a thorough code review of the following ${language} code.
-            Provide feedback on the following aspects:
-            1.  **Bugs and Errors**: Identify potential bugs, logic errors, and edge cases that might have been missed.
-            2.  **Performance**: Suggest optimizations for performance bottlenecks.
-            3.  **Clarity and Readability**: Comment on code style, naming conventions, and overall readability. Suggest improvements to make the code more maintainable.
-            4.  **Best Practices**: Check if the code follows established best practices and design patterns for ${language}.
-            5.  **Security**: Point out any potential security vulnerabilities.
-
-            Provide your feedback in Markdown format. Use headings, lists, and code blocks for clarity. Start with a brief summary of your findings.
-
-            Here is the code to review:
-            \`\`\`${language}
-            ${code}
-            \`\`\`
-            `;
-
-          try {
-            const aiClient = getAiClient();
-            const response = await aiClient.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt
-            });
-            return response.text;
-          } catch (error) {
-            console.error("Error reviewing code with Gemini:", error);
-            if (error instanceof Error) {
-                throw new Error(`An error occurred during the code review: ${error.message}`);
-            }
-            throw new Error("An unknown error occurred during the code review.");
-          }
-        };
-
-
-        const generateImage = async (prompt) => {
-          try {
-            const aiClient = getAiClient();
-            const response = await aiClient.models.generateImages({
-                model: 'imagen-4.0-generate-001',
-                prompt: prompt,
-                config: {
-                  numberOfImages: 1,
-                  outputMimeType: 'image/jpeg',
-                  aspectRatio: '1:1',
-                },
-            });
-
-            if (response.generatedImages && response.generatedImages.length > 0) {
-                const base64ImageBytes = response.generatedImages[0].image.imageBytes;
-                return `data:image/jpeg;base64,${base64ImageBytes}`;
-            } else {
-                throw new Error("No image was generated.");
-            }
-          } catch (error) {
-            console.error("Error generating image with Gemini:", error);
-            if (error instanceof Error) {
-                throw new Error(`An error occurred during image generation: ${error.message}`);
-            }
-            throw new Error("An unknown error occurred during image generation.");
-          }
-        };
-
-        const summarizeText = async (text) => {
-          const prompt = `
-            Please summarize the following text concisely. Capture the main points and key information.
-            The summary should be easy to read and understand.
-
-            Text to summarize:
-            ---
-            ${text}
-            ---
-          `;
-
-          try {
-            const aiClient = getAiClient();
-            const response = await aiClient.models.generateContent({
-              model: 'gemini-2.5-flash',
-              contents: prompt,
-            });
-            return response.text;
-          } catch (error) {
-            console.error("Error summarizing text with Gemini:", error);
-            if (error instanceof Error) {
-              throw new Error(`An error occurred during text summarization: ${error.message}`);
-            }
-            throw new Error("An unknown error occurred during text summarization.");
-          }
-        };
-        // --- END OF services/geminiService.ts ---
-
-        // --- START OF ICON COMPONENTS ---
+        // --- components/icons/LogoIcon.tsx ---
         const LogoIcon = (props) => (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
           </svg>
         );
 
+        // --- components/icons/CodeIcon.tsx ---
         const CodeIcon = (props) => (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
             <polyline points="16 18 22 12 16 6"></polyline>
@@ -169,6 +63,31 @@
           </svg>
         );
 
+        // --- components/icons/CalculatorIcon.tsx ---
+        const CalculatorIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                <line x1="8" y1="6" x2="16" y2="6"></line>
+                <line x1="12" y1="10" x2="12" y2="18"></line>
+                <line x1="8" y1="14" x2="16" y2="14"></line>
+            </svg>
+        );
+
+        // --- components/icons/TextIcon.tsx ---
+        const TextIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        );
+
+        // --- components/icons/ToolsIcon.tsx ---
+        const ToolsIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+        );
+
+        // --- components/icons/DocumentIcon.tsx ---
         const DocumentIcon = (props) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -179,21 +98,7 @@
             </svg>
         );
         
-        const CalculatorIcon = (props) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-                <line x1="8" y1="6" x2="16" y2="6"></line>
-                <line x1="12" y1="10" x2="12" y2="18"></line>
-                <line x1="8" y1="14" x2="16" y2="14"></line>
-            </svg>
-        );
-        
-        const TextIcon = (props) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-        );
-
+        // --- components/icons/DeveloperIcon.tsx ---
         const DeveloperIcon = (props) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                 <polyline points="16 18 22 12 16 6"></polyline>
@@ -202,12 +107,7 @@
             </svg>
         );
         
-        const ToolsIcon = (props) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-            </svg>
-        );
-        
+        // --- components/icons/CompressIcon.tsx ---
         const CompressIcon = (props) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -217,9 +117,61 @@
                 <polyline points="12 15 9 15 9 12"></polyline>
             </svg>
         );
-        // --- END OF ICON COMPONENTS ---
 
-        // --- START OF components/Ads.tsx ---
+        // --- components/icons/MenuIcon.tsx ---
+        const MenuIcon = (props) => (
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        );
+        
+        // --- components/icons/QrCodeIcon.tsx ---
+        const QrCodeIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+            </svg>
+        );
+
+        // --- services/geminiService.ts ---
+        const callGeminiAPI = async (endpoint, body) => {
+            try {
+                const response = await fetch(`/api/gemini/${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.text;
+
+            } catch (error) {
+                console.error(`Error calling Gemini API endpoint /${endpoint}:`, error);
+                if (error instanceof Error) {
+                  throw new Error(`The request to the AI service failed: ${error.message}`);
+                }
+                throw new Error("An unknown error occurred while contacting the AI service.");
+            }
+        };
+        
+        const reviewCode = async (code, language) => {
+            return callGeminiAPI('review', { code, language });
+        };
+        
+        const summarizeText = async (text) => {
+            return callGeminiAPI('summarize', { text });
+        };
+
+        // --- components/Ads.tsx ---
         const BannerAd = ({ slotId }) => {
           return (
             <div className="bg-slate-200 dark:bg-slate-700 text-center py-2 shrink-0">
@@ -263,115 +215,127 @@
             </div>
           );
         };
-        // --- END OF components/Ads.tsx ---
         
-        // --- START OF components/ApiKeyPrompt.tsx ---
-        const ApiKeyPrompt = () => {
-          return (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="bg-yellow-50 dark:bg-yellow-900/50 border border-yellow-400 dark:border-yellow-600 rounded-lg p-8 max-w-lg">
-                <svg className="w-16 h-16 text-yellow-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        // --- components/ReviewOutput.tsx ---
+        const ReviewOutput = ({ review, isLoading, error, loadingText = "Loading...", defaultText = "Results will appear here." }) => {
+            const Spinner = ({ text }) => (
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">API Key Required</h2>
-                <p className="text-slate-600 dark:text-slate-400">
-                  To use this tool, please enter your Gemini API Key in the settings panel in the sidebar.
-                </p>
+                <p className="mt-4 text-slate-500 dark:text-slate-400">{text}</p>
               </div>
-            </div>
-          );
-        };
-        // --- END OF components/ApiKeyPrompt.tsx ---
-        
-        // --- START OF components/ReviewOutput.tsx ---
-        const Spinner = () => (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p className="mt-4 text-slate-500 dark:text-slate-400">Gemini is reviewing your code...</p>
-          </div>
-        );
+            );
 
-        const ReviewOutput = ({ review, isLoading, error }) => {
-          const parseMarkdownToHTML = (text) => {
-            let sanitized = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            const parts = sanitized.split(/(\`{3}[\s\S]*?\`{3})/g);
-
-            const html = parts.map((part) => {
-              if (part.startsWith("```")) {
-                const langMatch = part.match(/^\`{3}(\w*)\n/);
-                const language = langMatch ? langMatch[1] : '';
-                const code = part.replace(/^\`{3}\w*\n/, '').replace(/\`{3}$/, '').trim();
-                return `<pre class="bg-slate-200 dark:bg-slate-900 rounded-md p-4 text-sm overflow-x-auto my-4"><code class="language-${language}">${code}</code></pre>`;
-              } else {
-                let processedPart = part;
-                processedPart = processedPart
-                  .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mt-4 mb-2 dark:text-white">$1</h3>')
-                  .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-6 mb-3 border-b pb-2 dark:text-white dark:border-slate-600">$1</h2>')
-                  .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-8 mb-4 border-b-2 pb-2 dark:text-white dark:border-slate-500">$1</h1>');
-                
-                processedPart = processedPart
-                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\*(.*?)\*/g, '<em>$1</em>');
-                    
-                processedPart = processedPart.replace(/(?:^\s*[-*] .*(?:\n|$))+/gm, (match) => {
-                    const listItems = match.trim().split('\n').map(line => 
-                        `<li>${line.replace(/^\s*[-*]\s*/, '')}</li>`
-                    ).join('');
-                    return `<ul class="list-disc list-outside pl-6 space-y-1 my-4">${listItems}</ul>`;
-                });
-                    
-                processedPart = processedPart.trim().split('\n\n').map(p => {
-                    const trimmedParagraph = p.trim();
-                    if (trimmedParagraph === '') return '';
-                    if (trimmedParagraph.match(/^<(h[1-3]|ul|li|pre)/)) {
-                        return trimmedParagraph;
+            const parseInlineText = (text) => {
+                const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
+                return parts.map((part, i) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                        return <strong key={i}>{part.slice(2, -2)}</strong>;
                     }
-                    return `<p>${trimmedParagraph.replace(/\n/g, '<br />')}</p>`;
-                }).join('');
+                    if (part.startsWith('*') && part.endsWith('*')) {
+                        return <em key={i}>{part.slice(1, -1)}</em>;
+                    }
+                    if (part.startsWith('`') && part.endsWith('`')) {
+                        return <code key={i} className="bg-slate-200 dark:bg-slate-700 text-red-500 dark:text-red-400 rounded px-1.5 py-1 font-mono text-sm">{part.slice(1, -1)}</code>;
+                    }
+                    return part;
+                });
+            };
+            
+            const renderMarkdown = (text) => {
+                if (!text) return null;
 
-                return processedPart;
-              }
-            }).join('');
+                const blocks = text.split(/(```[\s\S]*?```)/g);
 
-            return html;
-          };
+                return blocks.map((block, i) => {
+                    if (block.startsWith('```')) {
+                        const langMatch = block.match(/^```(\w*)\n/);
+                        const language = langMatch ? langMatch[1] : '';
+                        const code = block.replace(/^```\w*\n/, '').replace(/```$/, '').trim();
+                        return (
+                            <pre key={`code-${i}`} className="bg-slate-200 dark:bg-slate-900 rounded-md p-4 text-sm overflow-x-auto my-4">
+                                <code className={`language-${language}`}>{code}</code>
+                            </pre>
+                        );
+                    }
 
-          if (isLoading) {
-            return <Spinner />;
-          }
+                    const elements = [];
+                    let listItems = [];
 
-          if (error) {
-            return (
-              <div className="flex items-center justify-center h-full text-center text-red-500">
-                <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
-                  <p className="font-semibold">An Error Occurred</p>
-                  <p className="text-sm">{error}</p>
+                    const flushList = (keySuffix) => {
+                        if (listItems.length > 0) {
+                            elements.push(
+                                <ul key={`list-${keySuffix}`} className="list-disc list-outside pl-6 space-y-1 my-4">
+                                    {listItems}
+                                </ul>
+                            );
+                            listItems = [];
+                        }
+                    };
+                    
+                    const paragraphs = block.trim().split('\n\n');
+                    
+                    paragraphs.forEach((para, j) => {
+                        const lines = para.trim().split('\n');
+                        lines.forEach((line, k) => {
+                            const key = `el-${i}-${j}-${k}`;
+
+                            if (line.startsWith('# ')) {
+                                flushList(key);
+                                elements.push(<h1 key={key} className="text-3xl font-bold mt-8 mb-4 border-b-2 pb-2 dark:text-white dark:border-slate-500">{parseInlineText(line.substring(2))}</h1>);
+                            } else if (line.startsWith('## ')) {
+                                flushList(key);
+                                elements.push(<h2 key={key} className="text-2xl font-bold mt-6 mb-3 border-b pb-2 dark:text-white dark:border-slate-600">{parseInlineText(line.substring(3))}</h2>);
+                            } else if (line.startsWith('### ')) {
+                                flushList(key);
+                                elements.push(<h3 key={key} className="text-xl font-semibold mt-4 mb-2 dark:text-white">{parseInlineText(line.substring(4))}</h3>);
+                            } else if (line.match(/^\s*[-*]\s/)) {
+                                listItems.push(<li key={key}>{parseInlineText(line.replace(/^\s*[-*]\s/, ''))}</li>);
+                            } else if (line.trim()) {
+                                flushList(key);
+                                elements.push(<p key={key}>{parseInlineText(line)}</p>);
+                            }
+                        });
+                    });
+
+                    flushList(`final-${i}`);
+                    return elements.length > 0 ? <div key={`block-${i}`}>{elements}</div> : null;
+                });
+            };
+
+            if (isLoading) {
+              return <Spinner text={loadingText} />;
+            }
+
+            if (error) {
+              return (
+                <div className="flex items-center justify-center h-full text-center text-red-500">
+                  <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
+                    <p className="font-semibold">An Error Occurred</p>
+                    <p className="text-sm">{error}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          }
+              );
+            }
 
-          if (!review) {
+            if (!review) {
+              return (
+                <div className="flex items-center justify-center h-full text-center">
+                  <p className="text-slate-500 dark:text-slate-400">{defaultText}</p>
+                </div>
+              );
+            }
+
             return (
-              <div className="flex items-center justify-center h-full text-center">
-                <p className="text-slate-500 dark:text-slate-400">Your code review feedback will appear here.</p>
+              <div className="prose prose-slate dark:prose-invert max-w-none">
+                {renderMarkdown(review)}
               </div>
             );
-          }
-
-          return (
-            <div 
-              className="prose prose-slate dark:prose-invert max-w-none" 
-              dangerouslySetInnerHTML={{ __html: parseMarkdownToHTML(review) }} 
-            />
-          );
         };
-        // --- END OF components/ReviewOutput.tsx ---
-
-        // --- START OF components/CodeReviewer.tsx ---
+        
+        // --- components/CodeReviewer.tsx ---
         const CodeReviewer = () => {
           const languages = [
             "javascript", "python", "java", "csharp", "php", "cpp", "typescript", "go", "ruby", "swift", "kotlin", "rust", "sql", "html", "css"
@@ -410,10 +374,10 @@
             <>
               <header className="mb-6">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Code Reviewer</h1>
-                <p className="text-slate-500 dark:text-slate-400 mt-1">Get instant feedback on your code from Gemini.</p>
+                <p className="text-slate-500 dark:text-slate-400 mt-1">Analyze your code with Gemini for instant feedback on quality, style, and correctness.</p>
               </header>
               <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
-                <div className="flex flex-col h-full">
+                <div className="flex flex-col h-full min-h-[400px]">
                   <div className="mb-4">
                     <label htmlFor="language-select" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Language
@@ -464,106 +428,101 @@
             </>
           );
         }
-        // --- END OF components/CodeReviewer.tsx ---
+        
+        // --- components/QrCodeGenerator.tsx ---
+        const QrCodeGenerator = () => {
+            const [text, setText] = useState('https://react.dev');
+            const [size, setSize] = useState(256);
 
-        // --- START OF components/ImageGenerator.tsx ---
-        const ImageGeneratorSpinner = () => (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-                <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <p className="mt-4 text-slate-500 dark:text-slate-400">Gemini is creating your image...</p>
-            </div>
-        );
+            const qrCodeUrl = useMemo(() => {
+                if (!text.trim()) return '';
+                // Using a public API to generate QR codes to avoid adding a heavy library
+                return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=${size}x${size}&bgcolor=ffffff&qzone=1`;
+            }, [text, size]);
 
-        const ImageGenerator = () => {
-            const [prompt, setPrompt] = useState('A photorealistic image of a cat wearing a spacesuit, high resolution');
-            const [imageUrl, setImageUrl] = useState('');
-            const [isLoading, setIsLoading] = useState(false);
-            const [error, setError] = useState('');
-
-            const handleGenerate = useCallback(async () => {
-                if (!prompt.trim()) {
-                setError('Please enter a prompt to generate an image.');
-                return;
-                }
-                setIsLoading(true);
-                setError('');
-                setImageUrl('');
-                try {
-                const result = await generateImage(prompt);
-                setImageUrl(result);
-                } catch (err) {
-                if (err instanceof Error) {
-                    setError(`Failed to generate image: ${err.message}`);
-                } else {
-                    setError('An unknown error occurred during image generation.');
-                }
-                console.error(err);
-                } finally {
-                setIsLoading(false);
-                }
-            }, [prompt]);
+            const handleDownload = () => {
+                if (!qrCodeUrl) return;
+                const link = document.createElement('a');
+                
+                // Fetch the image as a blob to bypass potential cross-origin issues with direct download
+                fetch(qrCodeUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const blobUrl = URL.createObjectURL(blob);
+                        link.href = blobUrl;
+                        link.download = 'qrcode.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(blobUrl); // Clean up the blob URL
+                    })
+                    .catch(err => console.error("Failed to download QR code:", err));
+            };
 
             return (
                 <>
-                <header className="mb-6">
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Image Generator</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create stunning visuals with Gemini's image generation model.</p>
-                </header>
-                <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
-                    <div className="flex flex-col h-full">
-                        <div className="flex-1 flex flex-col">
-                        <label htmlFor="prompt-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Your Prompt
-                        </label>
-                        <textarea
-                            id="prompt-input"
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="e.g., A photorealistic image of a cat wearing a spacesuit on Mars"
-                            className="flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
-                            rows={5}
-                        />
-                        </div>
-                        <div className="mt-4">
-                        <button
-                            onClick={handleGenerate}
-                            disabled={isLoading}
-                            className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
-                        >
-                            {isLoading ? 'Generating...' : 'Generate Image'}
-                        </button>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 p-4">
-                    {isLoading && <ImageGeneratorSpinner />}
-                    {error && (
-                        <div className="text-center text-red-500">
-                            <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
-                            <p className="font-semibold">An Error Occurred</p>
-                            <p className="text-sm">{error}</p>
+                    <header className="mb-6">
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">QR Code Generator</h1>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Create and download QR codes for URLs, text, and more.</p>
+                    </header>
+                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div className="flex flex-col h-full min-h-[400px]">
+                            <div className="flex-1 flex flex-col">
+                                <label htmlFor="qr-text-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    Text or URL
+                                </label>
+                                <textarea
+                                    id="qr-text-input"
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    placeholder="Enter text or URL to encode"
+                                    className="flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                                    rows={5}
+                                />
+                            </div>
+                            <div className="mt-4">
+                                <label htmlFor="qr-size-slider" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    Size: {size}x{size} px
+                                </label>
+                                <input
+                                    id="qr-size-slider"
+                                    type="range"
+                                    min="128"
+                                    max="1024"
+                                    step="16"
+                                    value={size}
+                                    onChange={(e) => setSize(parseInt(e.target.value))}
+                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                                />
+                            </div>
+                             <div className="mt-4">
+                                <button
+                                    onClick={handleDownload}
+                                    disabled={!text.trim()}
+                                    className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    Download QR Code
+                                </button>
                             </div>
                         </div>
-                    )}
-                    {!isLoading && !error && imageUrl && (
-                        <img src={imageUrl} alt={prompt} className="max-w-full max-h-full object-contain rounded-md" />
-                    )}
-                    {!isLoading && !error && !imageUrl && (
-                        <div className="text-center text-slate-500 dark:text-slate-400">
-                            <p>Your generated image will appear here.</p>
+
+                        <div className="flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 p-4">
+                            {text.trim() ? (
+                                <div className="bg-white p-4 rounded-md shadow-md">
+                                    <img src={qrCodeUrl} alt="Generated QR Code" width={size} height={size} className="max-w-full max-h-full object-contain" />
+                                </div>
+                            ) : (
+                                <div className="text-center text-slate-500 dark:text-slate-400">
+                                    <p>Enter some text to generate a QR code.</p>
+                                </div>
+                            )}
                         </div>
-                    )}
                     </div>
-                </div>
                 </>
             );
         }
-        // --- END OF components/ImageGenerator.tsx ---
-        
-        // --- START OF components/ImageCompressor.tsx ---
+
+        // --- components/ImageCompressor.tsx ---
         const ImageCompressor = () => {
             const formatBytes = (bytes, decimals = 2) => {
                 if (bytes === 0) return '0 Bytes';
@@ -599,8 +558,10 @@
                 setOriginalImage(file);
                 setOriginalSize(file.size);
                 
+                if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
                 setOriginalImageUrl(URL.createObjectURL(file));
                 
+                if (compressedImageUrl) URL.revokeObjectURL(compressedImageUrl);
                 setCompressedImageUrl('');
                 setCompressedSize(0);
             };
@@ -675,13 +636,13 @@
                 <>
                     <header className="mb-6">
                         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Image Compressor</h1>
-                        <p className="text-slate-500 dark:text-slate-400 mt-1">Reduce image file sizes without compromising quality.</p>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Optimize your images by reducing file size without a noticeable drop in quality.</p>
                     </header>
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div className="flex flex-col">
                             {!originalImage ? (
                                 <div 
-                                    className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors"
+                                    className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors min-h-[300px]"
                                     onClick={() => fileInputRef.current?.click()}
                                     onDrop={handleDrop}
                                     onDragOver={(e) => e.preventDefault()}
@@ -724,7 +685,7 @@
                                             <p>Compressed Size: <strong className="text-green-500">{formatBytes(compressedSize)}</strong></p>
                                             {originalSize > 0 && <p>Reduction: <strong className="text-green-500">{(((originalSize - compressedSize) / originalSize) * 100).toFixed(2)}%</strong></p>}
                                         </div>
-                                        <div className="w-full flex gap-4">
+                                        <div className="w-full flex flex-col sm:flex-row gap-4">
                                             <button onClick={handleDownload} className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                                                 Download
                                             </button>
@@ -742,9 +703,8 @@
                 </>
             );
         }
-        // --- END OF components/ImageCompressor.tsx ---
-
-        // --- START OF components/DocumentSummarizer.tsx ---
+        
+        // --- components/DocumentSummarizer.tsx ---
         const DocumentSummarizer = () => {
             const [text, setText] = useState('');
             const [summary, setSummary] = useState('');
@@ -753,24 +713,24 @@
 
             const handleSummarize = useCallback(async () => {
                 if (!text.trim()) {
-                setError('Please enter some text to summarize.');
-                return;
+                    setError('Please enter some text to summarize.');
+                    return;
                 }
                 setIsLoading(true);
                 setError('');
                 setSummary('');
                 try {
-                const result = await summarizeText(text);
-                setSummary(result);
+                    const result = await summarizeText(text);
+                    setSummary(result);
                 } catch (err) {
-                if (err instanceof Error) {
-                    setError(`Failed to get summary: ${err.message}`);
-                } else {
-                    setError('An unknown error occurred during summarization.');
-                }
-                console.error(err);
+                    if (err instanceof Error) {
+                        setError(`Failed to get summary: ${err.message}`);
+                    } else {
+                        setError('An unknown error occurred during summarization.');
+                    }
+                    console.error(err);
                 } finally {
-                setIsLoading(false);
+                    setIsLoading(false);
                 }
             }, [text]);
 
@@ -778,10 +738,10 @@
                 <>
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Document Summarizer</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Get a concise summary of any text using Gemini.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Paste any document or text to get a quick, intelligent summary from Gemini.</p>
                 </header>
                 <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col h-full min-h-[400px]">
                     <div className="flex-1 flex flex-col">
                         <label htmlFor="text-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                         Your Text
@@ -817,9 +777,8 @@
                 </>
             );
         }
-        // --- END OF components/DocumentSummarizer.tsx ---
 
-        // --- START OF components/UnitConverter.tsx ---
+        // --- components/UnitConverter.tsx ---
         const UnitConverter = () => {
             const conversions = {
                 length: {
@@ -888,7 +847,7 @@
                 <>
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Unit Converter</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Quickly convert between different units.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Effortlessly convert units for length, mass, temperature, and more.</p>
                 </header>
                 <div className="flex-1 flex items-center justify-center">
                     <div className="w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -928,9 +887,8 @@
                 </>
             );
         }
-        // --- END OF components/UnitConverter.tsx ---
-        
-        // --- START OF components/JsonFormatter.tsx ---
+
+        // --- components/JsonFormatter.tsx ---
         const JsonFormatter = () => {
             const [jsonInput, setJsonInput] = useState('');
             const [formattedJson, setFormattedJson] = useState('');
@@ -938,22 +896,22 @@
 
             const handleFormat = useCallback(() => {
                 if (!jsonInput.trim()) {
-                setError('Please enter some JSON to format.');
-                setFormattedJson('');
-                return;
+                    setError('Please enter some JSON to format.');
+                    setFormattedJson('');
+                    return;
                 }
                 try {
-                const parsed = JSON.parse(jsonInput);
-                const formatted = JSON.stringify(parsed, null, 2);
-                setFormattedJson(formatted);
-                setError('');
+                    const parsed = JSON.parse(jsonInput);
+                    const formatted = JSON.stringify(parsed, null, 2);
+                    setFormattedJson(formatted);
+                    setError('');
                 } catch (e) {
-                if (e instanceof Error) {
-                    setError(`Invalid JSON: ${e.message}`);
-                } else {
-                    setError('An unknown error occurred while parsing JSON.');
-                }
-                setFormattedJson('');
+                    if (e instanceof Error) {
+                        setError(`Invalid JSON: ${e.message}`);
+                    } else {
+                        setError('An unknown error occurred while parsing JSON.');
+                    }
+                    setFormattedJson('');
                 }
             }, [jsonInput]);
 
@@ -961,59 +919,58 @@
                 <>
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">JSON Formatter</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Paste your JSON data to validate and format it instantly.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Clean up, validate, and beautify your JSON data for better readability.</p>
                 </header>
                 <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
-                    <div className="flex flex-col h-full">
-                    <div className="flex-1 flex flex-col">
-                        <label htmlFor="json-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Your JSON
-                        </label>
-                        <textarea
-                        id="json-input"
-                        value={jsonInput}
-                        onChange={(e) => setJsonInput(e.target.value)}
-                        placeholder='{ "key": "value", "nested": { "number": 123 } }'
-                        className="flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
-                        spellCheck="false"
-                        />
-                    </div>
-                    <div className="mt-4">
-                        <button
-                        onClick={handleFormat}
-                        className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                        >
-                        Format JSON
-                        </button>
-                    </div>
+                    <div className="flex flex-col h-full min-h-[400px]">
+                        <div className="flex-1 flex flex-col">
+                            <label htmlFor="json-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Your JSON
+                            </label>
+                            <textarea
+                            id="json-input"
+                            value={jsonInput}
+                            onChange={(e) => setJsonInput(e.target.value)}
+                            placeholder='{ "key": "value", "nested": { "number": 123 } }'
+                            className="flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                            spellCheck="false"
+                            />
+                        </div>
+                        <div className="mt-4">
+                            <button
+                            onClick={handleFormat}
+                            className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                            >
+                            Format JSON
+                            </button>
+                        </div>
                     </div>
 
                     <div className="flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
-                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
-                        Formatted Output
-                    </h2>
-                    <div className="flex-1 overflow-auto p-4">
-                        {error && (
-                        <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
-                            <p className="font-semibold">Error</p>
-                            <p className="text-sm">{error}</p>
+                        <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                            Formatted Output
+                        </h2>
+                        <div className="flex-1 overflow-auto p-4">
+                            {error && (
+                            <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
+                                <p className="font-semibold">Error</p>
+                                <p className="text-sm">{error}</p>
+                            </div>
+                            )}
+                            {!error && formattedJson && (
+                            <pre className="text-sm font-mono whitespace-pre-wrap break-all"><code>{formattedJson}</code></pre>
+                            )}
+                            {!error && !formattedJson && (
+                            <p className="text-slate-500 dark:text-slate-400 text-center">Your formatted JSON will appear here.</p>
+                            )}
                         </div>
-                        )}
-                        {!error && formattedJson && (
-                        <pre className="text-sm font-mono whitespace-pre-wrap break-all"><code>{formattedJson}</code></pre>
-                        )}
-                        {!error && !formattedJson && (
-                        <p className="text-slate-500 dark:text-slate-400 text-center">Your formatted JSON will appear here.</p>
-                        )}
-                    </div>
                     </div>
                 </div>
                 </>
             );
         }
-        // --- END OF components/JsonFormatter.tsx ---
 
-        // --- START OF components/RegexTester.tsx ---
+        // --- components/RegexTester.tsx ---
         const RegexTester = () => {
             const [pattern, setPattern] = useState('\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b');
             const [flags, setFlags] = useState({ g: true, i: true, m: false });
@@ -1031,7 +988,10 @@
                 const allMatches = Array.from(testString.matchAll(regex));
                 return { matches: allMatches, error: null };
                 } catch (e) {
-                return { matches: [], error: e.message };
+                    if (e instanceof Error) {
+                        return { matches: [], error: e.message };
+                    }
+                    return { matches: [], error: 'An unknown error occurred' };
                 }
             }, [pattern, flags, testString]);
 
@@ -1039,33 +999,33 @@
                 <>
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Regex Tester</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Test your regular expressions in real-time.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Validate and test your regular expressions against sample text in real-time.</p>
                 </header>
                 <div className="flex-1 flex flex-col overflow-hidden gap-4">
-                    <div className="flex gap-4">
-                    <div className="flex-1">
-                        <label htmlFor="pattern" className="text-sm font-medium text-slate-700 dark:text-slate-300">Regular Expression</label>
-                        <input
-                        id="pattern"
-                        type="text"
-                        value={pattern}
-                        onChange={e => setPattern(e.target.value)}
-                        className={`w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${error ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'}`}
-                        />
-                    </div>
-                    <div className="flex items-end gap-4">
-                        {Object.keys(flags).map(flag => (
-                        <label key={flag} className="flex items-center gap-2 cursor-pointer">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex-1">
+                            <label htmlFor="pattern" className="text-sm font-medium text-slate-700 dark:text-slate-300">Regular Expression</label>
                             <input
-                            type="checkbox"
-                            checked={flags[flag]}
-                            onChange={() => handleFlagChange(flag)}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            id="pattern"
+                            type="text"
+                            value={pattern}
+                            onChange={e => setPattern(e.target.value)}
+                            className={`w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${error ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'}`}
                             />
-                            <span className="font-mono text-sm">{flag}</span>
-                        </label>
-                        ))}
-                    </div>
+                        </div>
+                        <div className="flex items-end gap-4">
+                            {Object.keys(flags).map(flag => (
+                            <label key={flag} className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                type="checkbox"
+                                checked={flags[flag]}
+                                onChange={() => handleFlagChange(flag)}
+                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                />
+                                <span className="font-mono text-sm">{flag}</span>
+                            </label>
+                            ))}
+                        </div>
                     </div>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                     <div>
@@ -1100,9 +1060,8 @@
                 </>
             );
         }
-        // --- END OF components/RegexTester.tsx ---
-
-        // --- START OF components/PasswordGenerator.tsx ---
+        
+        // --- components/PasswordGenerator.tsx ---
         const PasswordGenerator = () => {
             const charset = {
                 lowercase: 'abcdefghijklmnopqrstuvwxyz',
@@ -1152,7 +1111,7 @@
                 <>
                 <header className="mb-6">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Password Generator</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create strong, secure, and random passwords.</p>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Generate strong, secure, and customizable passwords to protect your accounts.</p>
                 </header>
                 <div className="flex-1 flex items-center justify-center">
                     <div className="w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -1211,13 +1170,12 @@
                 </>
             );
         }
-        // --- END OF components/PasswordGenerator.tsx ---
 
-        // --- START OF components/Sidebar.tsx ---
-        const Sidebar = ({ isDarkMode, setIsDarkMode, activeTool, onNavClick, apiKey, onApiKeySave }) => {
+        // --- components/Sidebar.tsx ---
+        const Sidebar = ({ isDarkMode, setIsDarkMode, activeTool, onNavClick, onClose }) => {
             const navItems = [
                 { name: 'Code Reviewer', icon: CodeIcon },
-                { name: 'Image Generator', icon: DocumentIcon },
+                { name: 'QR Code Generator', icon: QrCodeIcon },
                 { name: 'Image Compressor', icon: CompressIcon },
                 { name: 'Document Summarizer', icon: DocumentIcon },
                 { name: 'Unit Converter', icon: CalculatorIcon },
@@ -1226,103 +1184,70 @@
                 { name: 'Password Generator', icon: ToolsIcon },
             ];
             
-            const [localApiKey, setLocalApiKey] = useState(apiKey);
-            const [showSaved, setShowSaved] = useState(false);
-
-            useEffect(() => {
-                setLocalApiKey(apiKey);
-            }, [apiKey]);
-            
-            const handleSaveClick = () => {
-                onApiKeySave(localApiKey);
-                setShowSaved(true);
-                setTimeout(() => setShowSaved(false), 2000);
-            };
-
             return (
-                <aside className="w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex flex-col p-4 h-full">
-                <div className="flex items-center gap-2 p-4 border-b border-slate-200 dark:border-slate-700">
-                    <LogoIcon className="w-8 h-8 text-indigo-600" />
-                    <h1 className="text-xl font-bold text-slate-800 dark:text-white">OmniTools</h1>
-                </div>
-                <nav className="flex-1 mt-4 overflow-y-auto">
-                    <ul>
-                    {navItems.map((item) => {
-                        const isActive = item.name === activeTool;
-                        return (
-                        <li key={item.name}>
-                            <button 
-                            onClick={() => onNavClick(item.name)} 
-                            className={`flex items-center gap-3 px-4 py-2 my-1 rounded-lg transition-colors w-full text-left ${
-                                isActive 
-                                ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' 
-                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
-                            }`}
-                            aria-current={isActive ? 'page' : undefined}
-                            >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium text-sm">{item.name}</span>
-                            {isActive && <div className="w-1 h-4 bg-indigo-500 rounded-full ml-auto"></div>}
-                            </button>
-                        </li>
-                        )}
-                    )}
-                    </ul>
-                </nav>
-                <div className="mt-auto p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
-                    <div>
-                    <label htmlFor="api-key" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
-                        Gemini API Key
-                    </label>
-                    <div className="flex gap-2">
-                        <input 
-                        id="api-key"
-                        type="password"
-                        value={localApiKey}
-                        onChange={(e) => setLocalApiKey(e.target.value)}
-                        placeholder="Enter your API key"
-                        className="flex-1 w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-1.5 text-xs focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                        <button
-                        onClick={handleSaveClick}
-                        className="px-3 py-1 text-xs font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                        {showSaved ? 'Saved!' : 'Save'}
+                <aside className="w-64 bg-white dark:bg-slate-800 rounded-r-2xl md:rounded-2xl shadow-lg flex flex-col p-4 h-full">
+                    <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+                        <div className="flex items-center gap-2">
+                            <LogoIcon className="w-8 h-8 text-indigo-600" />
+                            <h1 className="text-xl font-bold text-slate-800 dark:text-white">OmniTools</h1>
+                        </div>
+                        <button onClick={onClose} className="md:hidden text-slate-500 dark:text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
+                    <nav className="flex-1 mt-4 overflow-y-auto">
+                        <ul>
+                        {navItems.map((item) => {
+                            const isActive = item.name === activeTool;
+                            return (
+                            <li key={item.name}>
+                                <button 
+                                onClick={() => onNavClick(item.name)} 
+                                className={`flex items-center gap-3 px-4 py-2 my-1 rounded-lg transition-colors w-full text-left ${
+                                    isActive 
+                                    ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' 
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                }`}
+                                aria-current={isActive ? 'page' : undefined}
+                                >
+                                <item.icon className="w-5 h-5" />
+                                <span className="font-medium text-sm">{item.name}</span>
+                                {isActive && <div className="w-1 h-4 bg-indigo-500 rounded-full ml-auto"></div>}
+                                </button>
+                            </li>
+                            )}
+                        )}
+                        </ul>
+                    </nav>
+                    <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Dark Mode</span>
+                            <button onClick={() => setIsDarkMode(!isDarkMode)} aria-pressed={isDarkMode} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                isDarkMode ? 'bg-indigo-600' : 'bg-gray-200'
+                            }`}>
+                                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                isDarkMode ? 'translate-x-6' : 'translate-x-1'
+                                }`} />
+                            </button>
+                        </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Dark Mode</span>
-                    <button onClick={() => setIsDarkMode(!isDarkMode)} aria-pressed={isDarkMode} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        isDarkMode ? 'bg-indigo-600' : 'bg-gray-200'
-                    }`}>
-                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        isDarkMode ? 'translate-x-6' : 'translate-x-1'
-                        }`} />
-                    </button>
-                    </div>
-                </div>
                 </aside>
             );
         };
-        // --- END OF components/Sidebar.tsx ---
         
-        // --- START OF App.tsx ---
+        // --- App.tsx ---
         const App = () => {
             const POPUP_AD_TRIGGER_COUNT = 3;
-            const AI_TOOLS = ['Code Reviewer', 'Image Generator', 'Document Summarizer'];
-            const DEFAULT_API_KEY = "AIzaSyA-m-Ka093qVIYzwP7Haj3_TA0IcRiD-jc";
 
             const [isDarkMode, setIsDarkMode] = useState(false);
             const [activeTool, setActiveTool] = useState('Code Reviewer');
             const [isPopupVisible, setPopupVisible] = useState(false);
             const [navigationCount, setNavigationCount] = useState(0);
-            const [apiKey, setApiKey] = useState('');
+            const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-            // Helper functions for safe localStorage access
             const safeLocalStorageGet = (key, fallback) => {
                 try {
-                    const item = localStorage.getItem(key);
+                    const item = typeof window !== 'undefined' ? localStorage.getItem(key) : null;
                     return item === null ? fallback : item;
                 } catch (e) {
                     console.warn(`Could not read from localStorage: ${key}`, e);
@@ -1332,31 +1257,18 @@
 
             const safeLocalStorageSet = (key, value) => {
                 try {
-                    localStorage.setItem(key, value);
+                    if (typeof window !== 'undefined') {
+                        localStorage.setItem(key, value);
+                    }
                 } catch (e) {
                     console.warn(`Could not write to localStorage: ${key}`, e);
                 }
             };
 
             useEffect(() => {
-                const storedKey = safeLocalStorageGet('gemini-api-key', null);
-                if (storedKey) {
-                    setApiKey(storedKey);
-                } else {
-                    setApiKey(DEFAULT_API_KEY);
-                    safeLocalStorageSet('gemini-api-key', DEFAULT_API_KEY);
-                }
-                
                 const storedDarkMode = safeLocalStorageGet('dark-mode', 'false') === 'true';
                 setIsDarkMode(storedDarkMode);
-
             }, []);
-
-            useEffect(() => {
-                if (apiKey) {
-                    initializeGemini(apiKey);
-                }
-            }, [apiKey]);
             
             useEffect(() => {
                 if (isDarkMode) {
@@ -1367,19 +1279,15 @@
                 safeLocalStorageSet('dark-mode', isDarkMode);
             }, [isDarkMode]);
 
-            const handleApiKeySave = (newKey) => {
-                setApiKey(newKey);
-                safeLocalStorageSet('gemini-api-key', newKey);
-            };
-
             const handleNavClick = useCallback((toolName) => {
                 setActiveTool(toolName);
+                setSidebarOpen(false);
                 const newNavCount = navigationCount + 1;
                 setNavigationCount(newNavCount);
 
                 if (newNavCount >= POPUP_AD_TRIGGER_COUNT) {
-                setPopupVisible(true);
-                setNavigationCount(0);
+                    setPopupVisible(true);
+                    setNavigationCount(0);
                 }
             }, [navigationCount]);
 
@@ -1388,76 +1296,75 @@
             };
 
             const renderTool = () => {
-                if (AI_TOOLS.includes(activeTool) && !apiKey) {
-                return <ApiKeyPrompt />;
-                }
-
                 switch (activeTool) {
-                case 'Code Reviewer':
-                    return <CodeReviewer />;
-                case 'Image Generator':
-                    return <ImageGenerator />;
-                case 'Image Compressor':
-                    return <ImageCompressor />;
-                case 'Document Summarizer':
-                    return <DocumentSummarizer />;
-                case 'Unit Converter':
-                    return <UnitConverter />;
-                case 'JSON Formatter':
-                    return <JsonFormatter />;
-                case 'Regex Tester':
-                    return <RegexTester />;
-                case 'Password Generator':
-                    return <PasswordGenerator />;
-                default:
-                    return <CodeReviewer />;
+                    case 'Code Reviewer': return <CodeReviewer />;
+                    case 'QR Code Generator': return <QrCodeGenerator />;
+                    case 'Image Compressor': return <ImageCompressor />;
+                    case 'Document Summarizer': return <DocumentSummarizer />;
+                    case 'Unit Converter': return <UnitConverter />;
+                    case 'JSON Formatter': return <JsonFormatter />;
+                    case 'Regex Tester': return <RegexTester />;
+                    case 'Password Generator': return <PasswordGenerator />;
+                    default: return <CodeReviewer />;
                 }
             };
 
             return (
-                <div className={`flex h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
-                <div className="p-4">
-                    <Sidebar 
-                    isDarkMode={isDarkMode} 
-                    setIsDarkMode={setIsDarkMode} 
-                    activeTool={activeTool} 
-                    onNavClick={handleNavClick}
-                    apiKey={apiKey}
-                    onApiKeySave={handleApiKeySave}
+                <div className={`h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-300 ${isDarkMode ? 'dark' : ''} flex`}>
+                    <div 
+                        className={`fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden ${isSidebarOpen ? 'block' : 'hidden'}`}
+                        onClick={() => setSidebarOpen(false)}
+                    ></div>
+
+                    <div className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-40 p-0 md:p-4 h-full`}>
+                        <Sidebar 
+                            isDarkMode={isDarkMode} 
+                            setIsDarkMode={setIsDarkMode} 
+                            activeTool={activeTool} 
+                            onNavClick={handleNavClick}
+                            onClose={() => setSidebarOpen(false)}
+                        />
+                    </div>
+                    
+                    <main className="flex-1 flex flex-col overflow-hidden">
+                        <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-800 shadow shrink-0">
+                             <div className="flex items-center gap-2">
+                                <LogoIcon className="w-8 h-8 text-indigo-600" />
+                                <h1 className="text-xl font-bold text-slate-800 dark:text-white">OmniTools</h1>
+                            </div>
+                            <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-md text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <MenuIcon className="w-6 h-6" />
+                            </button>
+                        </header>
+
+                        <div className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex-1 flex flex-col overflow-hidden">
+                                <BannerAd slotId={adsConfig.topBanner} />
+                                <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto flex flex-col">
+                                    {renderTool()}
+                                </div>
+                                <BannerAd slotId={adsConfig.bottomBanner} />
+                            </div>
+                        </div>
+                    </main>
+                    
+                    <PopupAd 
+                        slotId={adsConfig.popup} 
+                        isOpen={isPopupVisible} 
+                        onClose={handleClosePopup} 
                     />
-                </div>
-                <main className="flex-1 flex flex-col p-8 overflow-hidden">
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex-1 flex flex-col overflow-hidden">
-                    <BannerAd slotId={adsConfig.topBanner} />
-                    <div className="flex-1 p-8 overflow-y-auto flex flex-col">
-                        {renderTool()}
-                    </div>
-                    <BannerAd slotId={adsConfig.bottomBanner} />
-                    </div>
-                </main>
-                <PopupAd 
-                    slotId={adsConfig.popup} 
-                    isOpen={isPopupVisible} 
-                    onClose={handleClosePopup} 
-                />
                 </div>
             );
         }
-        // --- END OF App.tsx ---
 
-        // --- START OF index.tsx ---
+        // --- index.tsx ---
         const rootElement = document.getElementById('root');
-        if (!rootElement) {
-          throw new Error("Could not find root element to mount to");
-        }
-
         const root = ReactDOM.createRoot(rootElement);
         root.render(
           <React.StrictMode>
             <App />
           </React.StrictMode>
         );
-        // --- END OF index.tsx ---
     </script>
 </body>
 </html>
