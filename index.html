@@ -21,105 +21,34 @@
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "react/": "https://aistudiocdn.com/react@^19.1.1/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0",
+        "react": "https://aistudiocdn.com/react@^19.1.1",
+        "react-dom/client": "https://aistudiocdn.com/react-dom@^19.1.1/client"
+      }
+    }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <div id="root"></div>
-    <script type="module">
+    <script type="text/babel" data-type="module">
         import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
         import ReactDOM from 'react-dom/client';
         import { GoogleGenAI } from "@google/genai";
 
-        // --- Start: Consolidated Code ---
-
-        // adsConfig.ts
+        // --- START OF adsConfig.ts ---
         const adsConfig = {
           topBanner: 'YOUR_TOP_BANNER_AD_UNIT_ID',
           bottomBanner: 'YOUR_BOTTOM_BANNER_AD_UNIT_ID',
           popup: 'YOUR_POPUP_AD_UNIT_ID',
         };
+        // --- END OF adsConfig.ts ---
 
-        // components/icons/LogoIcon.tsx
-        const LogoIcon = (props) => (
-          React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-            React.createElement('path', { d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" })
-          )
-        );
-
-        // components/icons/CodeIcon.tsx
-        const CodeIcon = (props) => (
-          React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-            React.createElement('polyline', { points: "16 18 22 12 16 6" }),
-            React.createElement('polyline', { points: "8 6 2 12 8 18" })
-          )
-        );
-
-        // components/icons/DocumentIcon.tsx
-        const DocumentIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('path', { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }),
-                React.createElement('polyline', { points: "14 2 14 8 20 8" }),
-                React.createElement('line', { x1: "16", y1: "13", x2: "8", y2: "13" }),
-                React.createElement('line', { x1: "16", y1: "17", x2: "8", y2: "17" }),
-                React.createElement('polyline', { points: "10 9 9 9 8 9" })
-            )
-        );
-
-        // components/icons/CalculatorIcon.tsx
-        const CalculatorIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('rect', { x: "4", y: "2", width: "16", height: "20", rx: "2", ry: "2" }),
-                React.createElement('line', { x1: "8", y1: "6", x2: "16", y2: "6" }),
-                React.createElement('line', { x1: "12", y1: "10", x2: "12", y2: "18" }),
-                React.createElement('line', { x1: "8", y1: "14", x2: "16", y2: "14" })
-            )
-        );
-
-        // components/icons/TextIcon.tsx
-        const TextIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('path', { d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" })
-            )
-        );
-
-        // components/icons/DeveloperIcon.tsx
-        const DeveloperIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('polyline', { points: "16 18 22 12 16 6" }),
-                React.createElement('polyline', { points: "8 6 2 12 8 18" }),
-                React.createElement('line', { x1: "12", y1: "4", x2: "12", y2: "20" })
-            )
-        );
-
-        // components/icons/ToolsIcon.tsx
-        const ToolsIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('path', { d: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" })
-            )
-        );
-
-        // components/icons/CompressIcon.tsx
-        const CompressIcon = (props) => (
-            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", ...props },
-                React.createElement('path', { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" }),
-                React.createElement('polyline', { points: "14 2 14 8 20 8" }),
-                React.createElement('line', { x1: "9", y1: "15", x2: "15", y2: "9" }),
-                React.createElement('polyline', { points: "12 9 15 9 15 12" }),
-                React.createElement('polyline', { points: "12 15 9 15 9 12" })
-            )
-        );
-
-        // services/geminiService.ts
+        // --- START OF services/geminiService.ts ---
         let ai = null;
+
         const initializeGemini = (apiKey) => {
           if (!apiKey) {
             ai = null;
@@ -127,12 +56,14 @@
           }
           ai = new GoogleGenAI({ apiKey });
         };
+
         const getAiClient = () => {
           if (!ai) {
             throw new Error("Gemini API key not set or invalid. Please set your key in the sidebar.");
           }
           return ai;
         };
+
         const reviewCode = async (code, language) => {
           const prompt = `
             As an expert senior software engineer, please perform a thorough code review of the following ${language} code.
@@ -150,6 +81,7 @@
             ${code}
             \`\`\`
             `;
+
           try {
             const aiClient = getAiClient();
             const response = await aiClient.models.generateContent({
@@ -165,6 +97,8 @@
             throw new Error("An unknown error occurred during the code review.");
           }
         };
+
+
         const generateImage = async (prompt) => {
           try {
             const aiClient = getAiClient();
@@ -177,6 +111,7 @@
                   aspectRatio: '1:1',
                 },
             });
+
             if (response.generatedImages && response.generatedImages.length > 0) {
                 const base64ImageBytes = response.generatedImages[0].image.imageBytes;
                 return `data:image/jpeg;base64,${base64ImageBytes}`;
@@ -191,6 +126,7 @@
             throw new Error("An unknown error occurred during image generation.");
           }
         };
+
         const summarizeText = async (text) => {
           const prompt = `
             Please summarize the following text concisely. Capture the main points and key information.
@@ -201,6 +137,7 @@
             ${text}
             ---
           `;
+
           try {
             const aiClient = getAiClient();
             const response = await aiClient.models.generateContent({
@@ -216,31 +153,79 @@
             throw new Error("An unknown error occurred during text summarization.");
           }
         };
+        // --- END OF services/geminiService.ts ---
 
-        // components/ApiKeyPrompt.tsx
-        const ApiKeyPrompt = () => {
-          return (
-            React.createElement('div', { className: "flex flex-col items-center justify-center h-full text-center" },
-              React.createElement('div', { className: "bg-yellow-50 dark:bg-yellow-900/50 border border-yellow-400 dark:border-yellow-600 rounded-lg p-8 max-w-lg" },
-                React.createElement('svg', { className: "w-16 h-16 text-yellow-500 mx-auto mb-4", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-                  React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" })
-                ),
-                React.createElement('h2', { className: "text-2xl font-bold text-slate-800 dark:text-white mb-2" }, "API Key Required"),
-                React.createElement('p', { className: "text-slate-600 dark:text-slate-400" },
-                  "To use this tool, please enter your Gemini API Key in the settings panel in the sidebar."
-                )
-              )
-            )
-          );
-        };
+        // --- START OF ICON COMPONENTS ---
+        const LogoIcon = (props) => (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        );
+
+        const CodeIcon = (props) => (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        );
+
+        const DocumentIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+        );
         
-        // components/Ads.tsx
+        const CalculatorIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                <line x1="8" y1="6" x2="16" y2="6"></line>
+                <line x1="12" y1="10" x2="12" y2="18"></line>
+                <line x1="8" y1="14" x2="16" y2="14"></line>
+            </svg>
+        );
+        
+        const TextIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        );
+
+        const DeveloperIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+                <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
+        );
+        
+        const ToolsIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+        );
+        
+        const CompressIcon = (props) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="9" y1="15" x2="15" y2="9"></line>
+                <polyline points="12 9 15 9 15 12"></polyline>
+                <polyline points="12 15 9 15 9 12"></polyline>
+            </svg>
+        );
+        // --- END OF ICON COMPONENTS ---
+
+        // --- START OF components/Ads.tsx ---
         const BannerAd = ({ slotId }) => {
           return (
-            React.createElement('div', { className: "bg-slate-200 dark:bg-slate-700 text-center py-2 shrink-0" },
-              React.createElement('p', { className: "text-sm text-slate-500 dark:text-slate-400" }, "Advertisement"),
-              React.createElement('div', { className: "text-xs text-slate-400 dark:text-slate-500" }, `Slot ID: ${slotId}`)
-            )
+            <div className="bg-slate-200 dark:bg-slate-700 text-center py-2 shrink-0">
+              <p className="text-sm text-slate-500 dark:text-slate-400">Advertisement</p>
+              <div className="text-xs text-slate-400 dark:text-slate-500">Slot ID: {slotId}</div>
+            </div>
           );
         };
 
@@ -248,96 +233,150 @@
           if (!isOpen) {
             return null;
           }
+
           return (
-            React.createElement('div', { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", 'aria-modal': "true", role: "dialog" },
-              React.createElement('div', { className: "bg-white dark:bg-slate-800 rounded-lg shadow-2xl p-6 w-full max-w-md relative" },
-                React.createElement('button', { onClick: onClose, className: "absolute top-2 right-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white", 'aria-label': "Close ad" },
-                  React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", className: "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-                    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M6 18L18 6M6 6l12 12" })
-                  )
-                ),
-                React.createElement('div', { className: "text-center" },
-                    React.createElement('h2', { className: "text-lg font-semibold mb-4 text-slate-800 dark:text-white" }, "Advertisement"),
-                    React.createElement('div', { className: "bg-slate-200 dark:bg-slate-700 p-8 min-h-[250px] flex items-center justify-center rounded" },
-                        React.createElement('div', null,
-                            React.createElement('p', { className: "text-sm text-slate-500 dark:text-slate-400" }, "Pop-up Ad Content"),
-                            React.createElement('div', { className: "text-xs text-slate-400 dark:text-slate-500 mt-1" }, `Slot ID: ${slotId}`)
-                        )
-                    )
-                )
-              )
-            )
+            <div 
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                aria-modal="true"
+                role="dialog"
+            >
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl p-6 w-full max-w-md relative">
+                <button 
+                    onClick={onClose} 
+                    className="absolute top-2 right-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
+                    aria-label="Close ad"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className="text-center">
+                    <h2 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Advertisement</h2>
+                    <div className="bg-slate-200 dark:bg-slate-700 p-8 min-h-[250px] flex items-center justify-center rounded">
+                        <div>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Pop-up Ad Content</p>
+                            <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">Slot ID: {slotId}</div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
           );
         };
+        // --- END OF components/Ads.tsx ---
         
-        // components/ReviewOutput.tsx
+        // --- START OF components/ApiKeyPrompt.tsx ---
+        const ApiKeyPrompt = () => {
+          return (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="bg-yellow-50 dark:bg-yellow-900/50 border border-yellow-400 dark:border-yellow-600 rounded-lg p-8 max-w-lg">
+                <svg className="w-16 h-16 text-yellow-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">API Key Required</h2>
+                <p className="text-slate-600 dark:text-slate-400">
+                  To use this tool, please enter your Gemini API Key in the settings panel in the sidebar.
+                </p>
+              </div>
+            </div>
+          );
+        };
+        // --- END OF components/ApiKeyPrompt.tsx ---
+        
+        // --- START OF components/ReviewOutput.tsx ---
         const Spinner = () => (
-          React.createElement('div', { className: "flex flex-col items-center justify-center h-full text-center" },
-            React.createElement('svg', { className: "animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24" },
-              React.createElement('circle', { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
-              React.createElement('path', { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-            ),
-            React.createElement('p', { className: "mt-4 text-slate-500 dark:text-slate-400" }, "Gemini is working...")
-          )
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p className="mt-4 text-slate-500 dark:text-slate-400">Gemini is reviewing your code...</p>
+          </div>
         );
 
         const ReviewOutput = ({ review, isLoading, error }) => {
           const parseMarkdownToHTML = (text) => {
             let sanitized = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             const parts = sanitized.split(/(\`{3}[\s\S]*?\`{3})/g);
-            return parts.map((part) => {
+
+            const html = parts.map((part) => {
               if (part.startsWith("```")) {
                 const langMatch = part.match(/^\`{3}(\w*)\n/);
                 const language = langMatch ? langMatch[1] : '';
-                const code = part.replace(/^\`{3}\w*\n/, '').replace(/\`{3}$/, '');
+                const code = part.replace(/^\`{3}\w*\n/, '').replace(/\`{3}$/, '').trim();
                 return `<pre class="bg-slate-200 dark:bg-slate-900 rounded-md p-4 text-sm overflow-x-auto my-4"><code class="language-${language}">${code}</code></pre>`;
               } else {
-                return part
+                let processedPart = part;
+                processedPart = processedPart
                   .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mt-4 mb-2 dark:text-white">$1</h3>')
                   .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-6 mb-3 border-b pb-2 dark:text-white dark:border-slate-600">$1</h2>')
-                  .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-8 mb-4 border-b-2 pb-2 dark:text-white dark:border-slate-500">$1</h1>')
+                  .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-8 mb-4 border-b-2 pb-2 dark:text-white dark:border-slate-500">$1</h1>');
+                
+                processedPart = processedPart
                   .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                  .replace(/^\s*[-*] (.*)/gim, '<li class="ml-6 list-disc">$1</li>')
-                  .replace(/<\/li>\n<li/g, '</li><li')
-                  .replace(/<li>/g, '<ul><li>')
-                  .replace(/<\/li>(?!\s*<li)/g, '</li></ul>')
-                  .replace(/\n/g, '<br />');
+                  .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                    
+                processedPart = processedPart.replace(/(?:^\s*[-*] .*(?:\n|$))+/gm, (match) => {
+                    const listItems = match.trim().split('\n').map(line => 
+                        `<li>${line.replace(/^\s*[-*]\s*/, '')}</li>`
+                    ).join('');
+                    return `<ul class="list-disc list-outside pl-6 space-y-1 my-4">${listItems}</ul>`;
+                });
+                    
+                processedPart = processedPart.trim().split('\n\n').map(p => {
+                    const trimmedParagraph = p.trim();
+                    if (trimmedParagraph === '') return '';
+                    if (trimmedParagraph.match(/^<(h[1-3]|ul|li|pre)/)) {
+                        return trimmedParagraph;
+                    }
+                    return `<p>${trimmedParagraph.replace(/\n/g, '<br />')}</p>`;
+                }).join('');
+
+                return processedPart;
               }
             }).join('');
+
+            return html;
           };
 
           if (isLoading) {
-            return React.createElement(Spinner);
+            return <Spinner />;
           }
+
           if (error) {
             return (
-              React.createElement('div', { className: "flex items-center justify-center h-full text-center text-red-500" },
-                React.createElement('div', { className: "bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4" },
-                  React.createElement('p', { className: "font-semibold" }, "An Error Occurred"),
-                  React.createElement('p', { className: "text-sm" }, error)
-                )
-              )
+              <div className="flex items-center justify-center h-full text-center text-red-500">
+                <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
+                  <p className="font-semibold">An Error Occurred</p>
+                  <p className="text-sm">{error}</p>
+                </div>
+              </div>
             );
           }
+
           if (!review) {
             return (
-              React.createElement('div', { className: "flex items-center justify-center h-full text-center" },
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400" }, "Your result will appear here.")
-              )
+              <div className="flex items-center justify-center h-full text-center">
+                <p className="text-slate-500 dark:text-slate-400">Your code review feedback will appear here.</p>
+              </div>
             );
           }
+
           return (
-            React.createElement('div', {
-              className: "prose prose-slate dark:prose-invert max-w-none",
-              dangerouslySetInnerHTML: { __html: parseMarkdownToHTML(review) }
-            })
+            <div 
+              className="prose prose-slate dark:prose-invert max-w-none" 
+              dangerouslySetInnerHTML={{ __html: parseMarkdownToHTML(review) }} 
+            />
           );
         };
-        
-        // components/CodeReviewer.tsx
+        // --- END OF components/ReviewOutput.tsx ---
+
+        // --- START OF components/CodeReviewer.tsx ---
         const CodeReviewer = () => {
-          const languages = ["javascript", "python", "java", "csharp", "php", "cpp", "typescript", "go", "ruby", "swift", "kotlin", "rust", "sql", "html", "css"];
+          const languages = [
+            "javascript", "python", "java", "csharp", "php", "cpp", "typescript", "go", "ruby", "swift", "kotlin", "rust", "sql", "html", "css"
+          ];
+
           const [code, setCode] = useState('');
           const [language, setLanguage] = useState('javascript');
           const [review, setReview] = useState('');
@@ -356,7 +395,11 @@
               const result = await reviewCode(code, language);
               setReview(result);
             } catch (err) {
-              setError(err instanceof Error ? `Failed to get review: ${err.message}` : 'An unknown error occurred.');
+              if (err instanceof Error) {
+                setError(`Failed to get review: ${err.message}`);
+              } else {
+                setError('An unknown error occurred during the code review.');
+              }
               console.error(err);
             } finally {
               setIsLoading(false);
@@ -364,111 +407,173 @@
           }, [code, language]);
 
           return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "AI Code Reviewer"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Get instant feedback on your code from Gemini.")
-              ),
-              React.createElement('div', { className: "flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden" },
-                React.createElement('div', { className: "flex flex-col h-full" },
-                  React.createElement('div', { className: "mb-4" },
-                    React.createElement('label', { htmlFor: "language-select", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Language"),
-                    React.createElement('select', { id: "language-select", value: language, onChange: (e) => setLanguage(e.target.value), className: "w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" },
-                      languages.map((lang) => React.createElement('option', { key: lang, value: lang, className: "capitalize" }, lang))
-                    )
-                  ),
-                  React.createElement('div', { className: "flex-1 flex flex-col" },
-                    React.createElement('label', { htmlFor: "code-input", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Your Code"),
-                    React.createElement('textarea', { id: "code-input", value: code, onChange: (e) => setCode(e.target.value), placeholder: "Paste your code here...", className: "flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500" })
-                  ),
-                  React.createElement('div', { className: "mt-4" },
-                    React.createElement('button', { onClick: handleReview, disabled: isLoading, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors" },
-                      isLoading ? 'Reviewing...' : 'Review Code'
-                    )
-                  )
-                ),
-                React.createElement('div', { className: "flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700" },
-                  React.createElement('h2', { className: "text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0" }, "Review Feedback"),
-                  React.createElement('div', { className: "flex-1 overflow-y-auto p-4" },
-                    React.createElement(ReviewOutput, { review: review, isLoading: isLoading, error: error })
-                  )
-                )
-              )
-            )
+            <>
+              <header className="mb-6">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Code Reviewer</h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-1">Get instant feedback on your code from Gemini.</p>
+              </header>
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+                <div className="flex flex-col h-full">
+                  <div className="mb-4">
+                    <label htmlFor="language-select" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Language
+                    </label>
+                    <select
+                      id="language-select"
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                      {languages.map((lang) => (
+                        <option key={lang} value={lang} className="capitalize">{lang}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <label htmlFor="code-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Your Code
+                    </label>
+                    <textarea
+                      id="code-input"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      placeholder="Paste your code here..."
+                      className="flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      onClick={handleReview}
+                      disabled={isLoading}
+                      className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {isLoading ? 'Reviewing...' : 'Review Code'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                  <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                    Review Feedback
+                  </h2>
+                  <div className="flex-1 overflow-y-auto p-4">
+                    <ReviewOutput review={review} isLoading={isLoading} error={error} />
+                  </div>
+                </div>
+              </div>
+            </>
           );
-        };
-        
-        // components/ImageGenerator.tsx
+        }
+        // --- END OF components/CodeReviewer.tsx ---
+
+        // --- START OF components/ImageGenerator.tsx ---
+        const ImageGeneratorSpinner = () => (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+                <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p className="mt-4 text-slate-500 dark:text-slate-400">Gemini is creating your image...</p>
+            </div>
+        );
+
         const ImageGenerator = () => {
-          const [prompt, setPrompt] = useState('A photorealistic image of a cat wearing a spacesuit, high resolution');
-          const [imageUrl, setImageUrl] = useState('');
-          const [isLoading, setIsLoading] = useState(false);
-          const [error, setError] = useState('');
+            const [prompt, setPrompt] = useState('A photorealistic image of a cat wearing a spacesuit, high resolution');
+            const [imageUrl, setImageUrl] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const [error, setError] = useState('');
 
-          const handleGenerate = useCallback(async () => {
-            if (!prompt.trim()) {
-              setError('Please enter a prompt to generate an image.');
-              return;
-            }
-            setIsLoading(true);
-            setError('');
-            setImageUrl('');
-            try {
-              const result = await generateImage(prompt);
-              setImageUrl(result);
-            } catch (err) {
-              setError(err instanceof Error ? `Failed to generate image: ${err.message}` : 'An unknown error occurred.');
-              console.error(err);
-            } finally {
-              setIsLoading(false);
-            }
-          }, [prompt]);
+            const handleGenerate = useCallback(async () => {
+                if (!prompt.trim()) {
+                setError('Please enter a prompt to generate an image.');
+                return;
+                }
+                setIsLoading(true);
+                setError('');
+                setImageUrl('');
+                try {
+                const result = await generateImage(prompt);
+                setImageUrl(result);
+                } catch (err) {
+                if (err instanceof Error) {
+                    setError(`Failed to generate image: ${err.message}`);
+                } else {
+                    setError('An unknown error occurred during image generation.');
+                }
+                console.error(err);
+                } finally {
+                setIsLoading(false);
+                }
+            }, [prompt]);
 
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "AI Image Generator"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Create stunning visuals with Gemini's image generation model.")
-              ),
-              React.createElement('div', { className: "flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden" },
-                React.createElement('div', { className: "flex flex-col h-full" },
-                  React.createElement('div', { className: "flex-1 flex flex-col" },
-                    React.createElement('label', { htmlFor: "prompt-input", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Your Prompt"),
-                    React.createElement('textarea', { id: "prompt-input", value: prompt, onChange: (e) => setPrompt(e.target.value), placeholder: "e.g., A photorealistic image of a cat wearing a spacesuit on Mars", className: "flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500", rows: 5 })
-                  ),
-                  React.createElement('div', { className: "mt-4" },
-                    React.createElement('button', { onClick: handleGenerate, disabled: isLoading, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors" },
-                      isLoading ? 'Generating...' : 'Generate Image'
-                    )
-                  )
-                ),
-                React.createElement('div', { className: "flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 p-4" },
-                  isLoading && React.createElement(Spinner),
-                  error && React.createElement('div', { className: "text-center text-red-500" },
-                    React.createElement('div', { className: "bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4" },
-                      React.createElement('p', { className: "font-semibold" }, "An Error Occurred"),
-                      React.createElement('p', { className: "text-sm" }, error)
-                    )
-                  ),
-                  !isLoading && !error && imageUrl && React.createElement('img', { src: imageUrl, alt: prompt, className: "max-w-full max-h-full object-contain rounded-md" }),
-                  !isLoading && !error && !imageUrl && React.createElement('div', { className: "text-center text-slate-500 dark:text-slate-400" }, React.createElement('p', null, "Your generated image will appear here."))
-                )
-              )
-            )
-          );
-        };
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Image Generator</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create stunning visuals with Gemini's image generation model.</p>
+                </header>
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+                    <div className="flex flex-col h-full">
+                        <div className="flex-1 flex flex-col">
+                        <label htmlFor="prompt-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Your Prompt
+                        </label>
+                        <textarea
+                            id="prompt-input"
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            placeholder="e.g., A photorealistic image of a cat wearing a spacesuit on Mars"
+                            className="flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                            rows={5}
+                        />
+                        </div>
+                        <div className="mt-4">
+                        <button
+                            onClick={handleGenerate}
+                            disabled={isLoading}
+                            className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {isLoading ? 'Generating...' : 'Generate Image'}
+                        </button>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 p-4">
+                    {isLoading && <ImageGeneratorSpinner />}
+                    {error && (
+                        <div className="text-center text-red-500">
+                            <div className="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
+                            <p className="font-semibold">An Error Occurred</p>
+                            <p className="text-sm">{error}</p>
+                            </div>
+                        </div>
+                    )}
+                    {!isLoading && !error && imageUrl && (
+                        <img src={imageUrl} alt={prompt} className="max-w-full max-h-full object-contain rounded-md" />
+                    )}
+                    {!isLoading && !error && !imageUrl && (
+                        <div className="text-center text-slate-500 dark:text-slate-400">
+                            <p>Your generated image will appear here.</p>
+                        </div>
+                    )}
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/ImageGenerator.tsx ---
         
-        // components/ImageCompressor.tsx
+        // --- START OF components/ImageCompressor.tsx ---
         const ImageCompressor = () => {
             const formatBytes = (bytes, decimals = 2) => {
-              if (bytes === 0) return '0 Bytes';
-              const k = 1024;
-              const dm = decimals < 0 ? 0 : decimals;
-              const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-              const i = Math.floor(Math.log(bytes) / Math.log(k));
-              return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
             };
-            
+
             const [originalImage, setOriginalImage] = useState(null);
             const [originalImageUrl, setOriginalImageUrl] = useState('');
             const [compressedImageUrl, setCompressedImageUrl] = useState('');
@@ -478,6 +583,13 @@
             const [error, setError] = useState('');
             const fileInputRef = useRef(null);
 
+            useEffect(() => {
+                return () => {
+                    if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
+                    if (compressedImageUrl) URL.revokeObjectURL(compressedImageUrl);
+                };
+            }, [originalImageUrl, compressedImageUrl]);
+
             const handleImageChange = (file) => {
                 if (!file.type.startsWith('image/')) {
                     setError('Please select a valid image file.');
@@ -486,7 +598,9 @@
                 setError('');
                 setOriginalImage(file);
                 setOriginalSize(file.size);
+                
                 setOriginalImageUrl(URL.createObjectURL(file));
+                
                 setCompressedImageUrl('');
                 setCompressedSize(0);
             };
@@ -506,28 +620,35 @@
             };
 
             const handleCompress = useCallback(() => {
-                if (!originalImage) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        const ctx = canvas.getContext('2d');
-                        if (!ctx) return;
-                        ctx.drawImage(img, 0, 0);
-                        canvas.toBlob((blob) => {
-                            if (blob) {
-                                setCompressedImageUrl(URL.createObjectURL(blob));
-                                setCompressedSize(blob.size);
+                if (!originalImageUrl) return;
+
+                const img = new Image();
+                img.src = originalImageUrl;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) {
+                        setError('Could not get canvas context for compression.');
+                        return;
+                    }
+                    ctx.drawImage(img, 0, 0);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            if (compressedImageUrl) {
+                                URL.revokeObjectURL(compressedImageUrl);
                             }
-                        }, 'image/jpeg', quality / 100);
-                    };
-                    img.src = event.target?.result;
+                            setCompressedImageUrl(URL.createObjectURL(blob));
+                            setCompressedSize(blob.size);
+                        }
+                    }, 'image/jpeg', quality / 100);
                 };
-                reader.readAsDataURL(originalImage);
-            }, [originalImage, quality]);
+                img.onerror = () => {
+                    setError('Failed to load image for compression. The file might be corrupt.');
+                };
+            }, [originalImageUrl, quality, compressedImageUrl]);
             
             const handleDownload = () => {
                 if (!compressedImageUrl) return;
@@ -548,534 +669,795 @@
                 setCompressedSize(0);
                 setError('');
                 if(fileInputRef.current) fileInputRef.current.value = '';
+            }
+
+            return (
+                <>
+                    <header className="mb-6">
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Image Compressor</h1>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1">Reduce image file sizes without compromising quality.</p>
+                    </header>
+                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div className="flex flex-col">
+                            {!originalImage ? (
+                                <div 
+                                    className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    onDrop={handleDrop}
+                                    onDragOver={(e) => e.preventDefault()}
+                                >
+                                    <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept="image/*" className="hidden" />
+                                    <svg className="w-16 h-16 text-slate-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-4-4V6a4 4 0 014-4h10a4 4 0 014 4v6a4 4 0 01-4 4H7z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 16v4m0 0l-2-2m2 2l2-2"></path></svg>
+                                    <p className="text-slate-500 dark:text-slate-400">Drag & Drop Image Here</p>
+                                    <p className="text-sm text-slate-400 dark:text-slate-500">or Click to Browse</p>
+                                    {error && <p className="text-red-500 mt-2">{error}</p>}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col">
+                                    <div className="relative mb-4 flex items-center justify-center bg-slate-100 dark:bg-slate-900 rounded-lg p-2">
+                                       <img src={originalImageUrl} alt="Original" className="max-w-full h-auto object-contain rounded-md" />
+                                    </div>
+                                    <div className="text-sm text-center mb-4">Original Size: <strong>{formatBytes(originalSize)}</strong></div>
+
+                                    <div className="mb-4">
+                                        <label htmlFor="quality" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Quality: {quality}</label>
+                                        <input type="range" id="quality" min="1" max="100" value={quality} onChange={(e) => setQuality(parseInt(e.target.value))} className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer" />
+                                    </div>
+                                     <button onClick={handleCompress} className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Compress
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                         <div className="flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                            <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                                Result
+                            </h2>
+                            <div className="flex-1 flex flex-col items-center justify-center p-4">
+                               {compressedImageUrl ? (
+                                   <>
+                                        <div className="relative mb-4 flex-1 flex items-center justify-center w-full">
+                                            <img src={compressedImageUrl} alt="Compressed" className="max-w-full max-h-full object-contain rounded-md" />
+                                        </div>
+                                        <div className="text-center mb-4">
+                                            <p>Compressed Size: <strong className="text-green-500">{formatBytes(compressedSize)}</strong></p>
+                                            {originalSize > 0 && <p>Reduction: <strong className="text-green-500">{(((originalSize - compressedSize) / originalSize) * 100).toFixed(2)}%</strong></p>}
+                                        </div>
+                                        <div className="w-full flex gap-4">
+                                            <button onClick={handleDownload} className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                                Download
+                                            </button>
+                                            <button onClick={handleReset} className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-slate-300 dark:border-slate-600 text-base font-medium rounded-md shadow-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                                Reset
+                                            </button>
+                                        </div>
+                                   </>
+                               ) : (
+                                   <p className="text-slate-500 dark:text-slate-400 text-center">Your compressed image will appear here.</p>
+                               )}
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+        // --- END OF components/ImageCompressor.tsx ---
+
+        // --- START OF components/DocumentSummarizer.tsx ---
+        const DocumentSummarizer = () => {
+            const [text, setText] = useState('');
+            const [summary, setSummary] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const [error, setError] = useState('');
+
+            const handleSummarize = useCallback(async () => {
+                if (!text.trim()) {
+                setError('Please enter some text to summarize.');
+                return;
+                }
+                setIsLoading(true);
+                setError('');
+                setSummary('');
+                try {
+                const result = await summarizeText(text);
+                setSummary(result);
+                } catch (err) {
+                if (err instanceof Error) {
+                    setError(`Failed to get summary: ${err.message}`);
+                } else {
+                    setError('An unknown error occurred during summarization.');
+                }
+                console.error(err);
+                } finally {
+                setIsLoading(false);
+                }
+            }, [text]);
+
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Document Summarizer</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Get a concise summary of any text using Gemini.</p>
+                </header>
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+                    <div className="flex flex-col h-full">
+                    <div className="flex-1 flex flex-col">
+                        <label htmlFor="text-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Your Text
+                        </label>
+                        <textarea
+                        id="text-input"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        placeholder="Paste your document or text here..."
+                        className="flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+                    <div className="mt-4">
+                        <button
+                        onClick={handleSummarize}
+                        disabled={isLoading}
+                        className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors"
+                        >
+                        {isLoading ? 'Summarizing...' : 'Summarize Text'}
+                        </button>
+                    </div>
+                    </div>
+
+                    <div className="flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                        Summary
+                    </h2>
+                    <div className="flex-1 overflow-y-auto p-4">
+                        <ReviewOutput review={summary} isLoading={isLoading} error={error} />
+                    </div>
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/DocumentSummarizer.tsx ---
+
+        // --- START OF components/UnitConverter.tsx ---
+        const UnitConverter = () => {
+            const conversions = {
+                length: {
+                    meter: 1,
+                    kilometer: 1000,
+                    centimeter: 0.01,
+                    millimeter: 0.001,
+                    mile: 1609.34,
+                    yard: 0.9144,
+                    foot: 0.3048,
+                    inch: 0.0254,
+                },
+                mass: {
+                    gram: 1,
+                    kilogram: 1000,
+                    milligram: 0.001,
+                    pound: 453.592,
+                    ounce: 28.3495,
+                },
+                temperature: {
+                    celsius: (c) => c,
+                    fahrenheit: (f) => (f - 32) * 5/9,
+                    kelvin: (k) => k - 273.15,
+                },
             };
 
-            return React.createElement(React.Fragment, null,
-                React.createElement('header', { className: "mb-6" },
-                    React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "Image Compressor"),
-                    React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Reduce image file sizes without compromising quality.")
-                ),
-                React.createElement('div', { className: "flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden" },
-                    React.createElement('div', { className: "flex flex-col h-full" },
-                        !originalImage ? (
-                            React.createElement('div', { 
-                                className: "flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition-colors",
-                                onClick: () => fileInputRef.current?.click(),
-                                onDrop: handleDrop,
-                                onDragOver: (e) => e.preventDefault()
-                            },
-                                React.createElement('input', { type: "file", ref: fileInputRef, onChange: handleFileSelect, accept: "image/*", className: "hidden" }),
-                                React.createElement('svg', { className: "w-16 h-16 text-slate-400 mb-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", xmlns: "http://www.w3.org/2000/svg" }, React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M7 16a4 4 0 01-4-4V6a4 4 0 014-4h10a4 4 0 014 4v6a4 4 0 01-4 4H7z" }), React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M12 16v4m0 0l-2-2m2 2l2-2" })),
-                                React.createElement('p', { className: "text-slate-500 dark:text-slate-400" }, "Drag & Drop Image Here"),
-                                React.createElement('p', { className: "text-sm text-slate-400 dark:text-slate-500" }, "or Click to Browse"),
-                                error && React.createElement('p', { className: "text-red-500 mt-2" }, error)
-                            )
+            const tempOutputConversions = {
+                celsius: (c) => c,
+                fahrenheit: (c) => (c * 9/5) + 32,
+                kelvin: (c) => c + 273.15,
+            };
+
+            const [category, setCategory] = useState('length');
+            const [inputValue, setInputValue] = useState('1');
+            const [fromUnit, setFromUnit] = useState('meter');
+            const [toUnit, setToUnit] = useState('foot');
+
+            const handleCategoryChange = (e) => {
+                const newCategory = e.target.value;
+                setCategory(newCategory);
+                const units = Object.keys(conversions[newCategory]);
+                setFromUnit(units[0]);
+                setToUnit(units[1] || units[0]);
+                setInputValue('1');
+            };
+
+            const outputValue = useMemo(() => {
+                const inputNum = parseFloat(inputValue);
+                if (isNaN(inputNum)) return '';
+
+                if (category === 'temperature') {
+                    const baseValue = conversions.temperature[fromUnit](inputNum);
+                    const result = tempOutputConversions[toUnit](baseValue);
+                    return result.toFixed(2);
+                } else {
+                    const categoryUnits = conversions[category];
+                    const baseValue = inputNum * categoryUnits[fromUnit];
+                    const result = baseValue / categoryUnits[toUnit];
+                    return result.toFixed(5);
+                }
+            }, [inputValue, fromUnit, toUnit, category]);
+            
+            const units = Object.keys(conversions[category]);
+
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Unit Converter</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Quickly convert between different units.</p>
+                </header>
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div>
+                        <label htmlFor="category" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Category</label>
+                        <select id="category" value={category} onChange={handleCategoryChange} className="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize">
+                        {Object.keys(conversions).map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                        </select>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <div className="flex-1">
+                        <label htmlFor="fromUnit" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">From</label>
+                        <select id="fromUnit" value={fromUnit} onChange={e => setFromUnit(e.target.value)} className="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize">
+                            {units.map(unit => <option key={unit} value={unit}>{unit}</option>)}
+                        </select>
+                        </div>
+                        <div className="flex-1">
+                        <label htmlFor="toUnit" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">To</label>
+                        <select id="toUnit" value={toUnit} onChange={e => setToUnit(e.target.value)} className="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize">
+                            {units.map(unit => <option key={unit} value={unit}>{unit}</option>)}
+                        </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="inputValue" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Input</label>
+                        <input type="number" id="inputValue" value={inputValue} onChange={e => setInputValue(e.target.value)} className="w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                    </div>
+
+                    <div>
+                        <p className="text-lg font-medium text-slate-700 dark:text-slate-300">Result:</p>
+                        <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 break-all">{outputValue}</p>
+                    </div>
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/UnitConverter.tsx ---
+        
+        // --- START OF components/JsonFormatter.tsx ---
+        const JsonFormatter = () => {
+            const [jsonInput, setJsonInput] = useState('');
+            const [formattedJson, setFormattedJson] = useState('');
+            const [error, setError] = useState('');
+
+            const handleFormat = useCallback(() => {
+                if (!jsonInput.trim()) {
+                setError('Please enter some JSON to format.');
+                setFormattedJson('');
+                return;
+                }
+                try {
+                const parsed = JSON.parse(jsonInput);
+                const formatted = JSON.stringify(parsed, null, 2);
+                setFormattedJson(formatted);
+                setError('');
+                } catch (e) {
+                if (e instanceof Error) {
+                    setError(`Invalid JSON: ${e.message}`);
+                } else {
+                    setError('An unknown error occurred while parsing JSON.');
+                }
+                setFormattedJson('');
+                }
+            }, [jsonInput]);
+
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">JSON Formatter</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Paste your JSON data to validate and format it instantly.</p>
+                </header>
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden">
+                    <div className="flex flex-col h-full">
+                    <div className="flex-1 flex flex-col">
+                        <label htmlFor="json-input" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Your JSON
+                        </label>
+                        <textarea
+                        id="json-input"
+                        value={jsonInput}
+                        onChange={(e) => setJsonInput(e.target.value)}
+                        placeholder='{ "key": "value", "nested": { "number": 123 } }'
+                        className="flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500"
+                        spellCheck="false"
+                        />
+                    </div>
+                    <div className="mt-4">
+                        <button
+                        onClick={handleFormat}
+                        className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                        >
+                        Format JSON
+                        </button>
+                    </div>
+                    </div>
+
+                    <div className="flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                        Formatted Output
+                    </h2>
+                    <div className="flex-1 overflow-auto p-4">
+                        {error && (
+                        <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4">
+                            <p className="font-semibold">Error</p>
+                            <p className="text-sm">{error}</p>
+                        </div>
+                        )}
+                        {!error && formattedJson && (
+                        <pre className="text-sm font-mono whitespace-pre-wrap break-all"><code>{formattedJson}</code></pre>
+                        )}
+                        {!error && !formattedJson && (
+                        <p className="text-slate-500 dark:text-slate-400 text-center">Your formatted JSON will appear here.</p>
+                        )}
+                    </div>
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/JsonFormatter.tsx ---
+
+        // --- START OF components/RegexTester.tsx ---
+        const RegexTester = () => {
+            const [pattern, setPattern] = useState('\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b');
+            const [flags, setFlags] = useState({ g: true, i: true, m: false });
+            const [testString, setTestString] = useState('Contact us at support@example.com or sales@example.org for more info.');
+            
+            const handleFlagChange = (flag) => {
+                setFlags(prev => ({ ...prev, [flag]: !prev[flag] }));
+            };
+
+            const { matches, error } = useMemo(() => {
+                if (!pattern) return { matches: [], error: null };
+                try {
+                const flagsString = Object.keys(flags).filter(f => flags[f]).join('');
+                const regex = new RegExp(pattern, flagsString);
+                const allMatches = Array.from(testString.matchAll(regex));
+                return { matches: allMatches, error: null };
+                } catch (e) {
+                return { matches: [], error: e.message };
+                }
+            }, [pattern, flags, testString]);
+
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Regex Tester</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Test your regular expressions in real-time.</p>
+                </header>
+                <div className="flex-1 flex flex-col overflow-hidden gap-4">
+                    <div className="flex gap-4">
+                    <div className="flex-1">
+                        <label htmlFor="pattern" className="text-sm font-medium text-slate-700 dark:text-slate-300">Regular Expression</label>
+                        <input
+                        id="pattern"
+                        type="text"
+                        value={pattern}
+                        onChange={e => setPattern(e.target.value)}
+                        className={`w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${error ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'}`}
+                        />
+                    </div>
+                    <div className="flex items-end gap-4">
+                        {Object.keys(flags).map(flag => (
+                        <label key={flag} className="flex items-center gap-2 cursor-pointer">
+                            <input
+                            type="checkbox"
+                            checked={flags[flag]}
+                            onChange={() => handleFlagChange(flag)}
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <span className="font-mono text-sm">{flag}</span>
+                        </label>
+                        ))}
+                    </div>
+                    </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    <div>
+                    <label htmlFor="testString" className="text-sm font-medium text-slate-700 dark:text-slate-300">Test String</label>
+                    <textarea
+                        id="testString"
+                        value={testString}
+                        onChange={e => setTestString(e.target.value)}
+                        className="w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md resize-y focus:ring-indigo-500 focus:border-indigo-500 h-32"
+                    />
+                    </div>
+                    <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                        Matches ({matches.length})
+                    </h2>
+                    <div className="flex-1 overflow-y-auto p-4">
+                        {matches.length > 0 ? (
+                        <ul className="space-y-2">
+                            {matches.map((match, i) => (
+                            <li key={i} className="p-2 bg-slate-100 dark:bg-slate-800 rounded-md">
+                                <span className="font-mono text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/50 px-1 py-0.5 rounded">{match[0]}</span>
+                                <span className="text-xs text-slate-500 ml-2">(index: {match.index})</span>
+                            </li>
+                            ))}
+                        </ul>
                         ) : (
-                            React.createElement('div', { className: "flex flex-col h-full" },
-                                React.createElement('div', { className: "relative mb-4 flex-1 flex items-center justify-center bg-slate-100 dark:bg-slate-900 rounded-lg p-2" },
-                                   React.createElement('img', { src: originalImageUrl, alt: "Original", className: "max-w-full max-h-full object-contain rounded-md" })
-                                ),
-                                React.createElement('div', { className: "text-sm text-center mb-4" }, "Original Size: ", React.createElement('strong', null, formatBytes(originalSize))),
-                                React.createElement('div', { className: "mb-4" },
-                                    React.createElement('label', { htmlFor: "quality", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, `Quality: ${quality}`),
-                                    React.createElement('input', { type: "range", id: "quality", min: "1", max: "100", value: quality, onChange: (e) => setQuality(parseInt(e.target.value)), className: "w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer" })
-                                ),
-                                 React.createElement('button', { onClick: handleCompress, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" }, "Compress")
-                            )
-                        )
-                    ),
-                    React.createElement('div', { className: "flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700" },
-                        React.createElement('h2', { className: "text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0" }, "Result"),
-                        React.createElement('div', { className: "flex-1 flex flex-col items-center justify-center p-4" },
-                           compressedImageUrl ? (
-                               React.createElement(React.Fragment, null,
-                                    React.createElement('div', { className: "relative mb-4 flex-1 flex items-center justify-center w-full" },
-                                        React.createElement('img', { src: compressedImageUrl, alt: "Compressed", className: "max-w-full max-h-full object-contain rounded-md" })
-                                    ),
-                                    React.createElement('div', { className: "text-center mb-4" },
-                                        React.createElement('p', null, "Compressed Size: ", React.createElement('strong', { className: "text-green-500" }, formatBytes(compressedSize))),
-                                        React.createElement('p', null, "Reduction: ", React.createElement('strong', { className: "text-green-500" }, `${(((originalSize - compressedSize) / originalSize) * 100).toFixed(2)}%`))
-                                    ),
-                                    React.createElement('div', { className: "w-full flex gap-4" },
-                                        React.createElement('button', { onClick: handleDownload, className: "flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" }, "Download"),
-                                        React.createElement('button', { onClick: handleReset, className: "flex-1 inline-flex justify-center items-center px-6 py-3 border border-slate-300 dark:border-slate-600 text-base font-medium rounded-md shadow-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" }, "Reset")
-                                    )
-                               )
-                           ) : (
-                               React.createElement('p', { className: "text-slate-500 dark:text-slate-400 text-center" }, "Your compressed image will appear here.")
-                           )
-                        )
-                    )
-                )
+                        <p className="text-slate-500 dark:text-slate-400 text-center">No matches found.</p>
+                        )}
+                    </div>
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/RegexTester.tsx ---
+
+        // --- START OF components/PasswordGenerator.tsx ---
+        const PasswordGenerator = () => {
+            const charset = {
+                lowercase: 'abcdefghijklmnopqrstuvwxyz',
+                uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                numbers: '0123456789',
+                symbols: '!@#$%^&*()_+~`|}{[]:;?><,./-=',
+            };
+
+            const [password, setPassword] = useState('');
+            const [length, setLength] = useState(16);
+            const [options, setOptions] = useState({
+                uppercase: true,
+                numbers: true,
+                symbols: true,
+            });
+            const [copied, setCopied] = useState(false);
+
+            const generatePassword = useCallback(() => {
+                let availableChars = charset.lowercase;
+                if (options.uppercase) availableChars += charset.uppercase;
+                if (options.numbers) availableChars += charset.numbers;
+                if (options.symbols) availableChars += charset.symbols;
+
+                let newPassword = '';
+                for (let i = 0; i < length; i++) {
+                newPassword += availableChars[Math.floor(Math.random() * availableChars.length)];
+                }
+                setPassword(newPassword);
+                setCopied(false);
+            }, [length, options]);
+
+            useEffect(() => {
+                generatePassword();
+            }, [length, options, generatePassword]);
+            
+            const handleOptionChange = (option) => {
+                setOptions(prev => ({...prev, [option]: !prev[option]}));
+            };
+
+            const handleCopy = () => {
+                navigator.clipboard.writeText(password);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+            
+            return (
+                <>
+                <header className="mb-6">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Password Generator</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Create strong, secure, and random passwords.</p>
+                </header>
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="relative">
+                        <input
+                        type="text"
+                        value={password}
+                        readOnly
+                        className="w-full p-4 font-mono text-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md pr-24"
+                        aria-label="Generated Password"
+                        />
+                        <button onClick={handleCopy} className="absolute inset-y-0 right-0 px-4 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200">
+                        {copied ? 'Copied!' : 'Copy'}
+                        </button>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                        <label htmlFor="length" className="font-medium">Password Length</label>
+                        <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{length}</span>
+                        </div>
+                        <input
+                        id="length"
+                        type="range"
+                        min="8"
+                        max="64"
+                        value={length}
+                        onChange={e => setLength(parseInt(e.target.value))}
+                        className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <label className="flex items-center gap-2 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md cursor-pointer">
+                        <input type="checkbox" checked={options.uppercase} onChange={() => handleOptionChange('uppercase')} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+                        <span>Uppercase</span>
+                        </label>
+                        <label className="flex items-center gap-2 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md cursor-pointer">
+                        <input type="checkbox" checked={options.numbers} onChange={() => handleOptionChange('numbers')} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+                        <span>Numbers</span>
+                        </label>
+                        <label className="flex items-center gap-2 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md cursor-pointer">
+                        <input type="checkbox" checked={options.symbols} onChange={() => handleOptionChange('symbols')} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+                        <span>Symbols</span>
+                        </label>
+                    </div>
+                    
+                    <button
+                        onClick={generatePassword}
+                        className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                        >
+                        Generate New Password
+                        </button>
+                    </div>
+                </div>
+                </>
+            );
+        }
+        // --- END OF components/PasswordGenerator.tsx ---
+
+        // --- START OF components/Sidebar.tsx ---
+        const Sidebar = ({ isDarkMode, setIsDarkMode, activeTool, onNavClick, apiKey, onApiKeySave }) => {
+            const navItems = [
+                { name: 'Code Reviewer', icon: CodeIcon },
+                { name: 'Image Generator', icon: DocumentIcon },
+                { name: 'Image Compressor', icon: CompressIcon },
+                { name: 'Document Summarizer', icon: DocumentIcon },
+                { name: 'Unit Converter', icon: CalculatorIcon },
+                { name: 'JSON Formatter', icon: TextIcon },
+                { name: 'Regex Tester', icon: DeveloperIcon },
+                { name: 'Password Generator', icon: ToolsIcon },
+            ];
+            
+            const [localApiKey, setLocalApiKey] = useState(apiKey);
+            const [showSaved, setShowSaved] = useState(false);
+
+            useEffect(() => {
+                setLocalApiKey(apiKey);
+            }, [apiKey]);
+            
+            const handleSaveClick = () => {
+                onApiKeySave(localApiKey);
+                setShowSaved(true);
+                setTimeout(() => setShowSaved(false), 2000);
+            };
+
+            return (
+                <aside className="w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex flex-col p-4 h-full">
+                <div className="flex items-center gap-2 p-4 border-b border-slate-200 dark:border-slate-700">
+                    <LogoIcon className="w-8 h-8 text-indigo-600" />
+                    <h1 className="text-xl font-bold text-slate-800 dark:text-white">OmniTools</h1>
+                </div>
+                <nav className="flex-1 mt-4 overflow-y-auto">
+                    <ul>
+                    {navItems.map((item) => {
+                        const isActive = item.name === activeTool;
+                        return (
+                        <li key={item.name}>
+                            <button 
+                            onClick={() => onNavClick(item.name)} 
+                            className={`flex items-center gap-3 px-4 py-2 my-1 rounded-lg transition-colors w-full text-left ${
+                                isActive 
+                                ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' 
+                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            }`}
+                            aria-current={isActive ? 'page' : undefined}
+                            >
+                            <item.icon className="w-5 h-5" />
+                            <span className="font-medium text-sm">{item.name}</span>
+                            {isActive && <div className="w-1 h-4 bg-indigo-500 rounded-full ml-auto"></div>}
+                            </button>
+                        </li>
+                        )}
+                    )}
+                    </ul>
+                </nav>
+                <div className="mt-auto p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                    <div>
+                    <label htmlFor="api-key" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
+                        Gemini API Key
+                    </label>
+                    <div className="flex gap-2">
+                        <input 
+                        id="api-key"
+                        type="password"
+                        value={localApiKey}
+                        onChange={(e) => setLocalApiKey(e.target.value)}
+                        placeholder="Enter your API key"
+                        className="flex-1 w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-1.5 text-xs focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        <button
+                        onClick={handleSaveClick}
+                        className="px-3 py-1 text-xs font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                        {showSaved ? 'Saved!' : 'Save'}
+                        </button>
+                    </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Dark Mode</span>
+                    <button onClick={() => setIsDarkMode(!isDarkMode)} aria-pressed={isDarkMode} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        isDarkMode ? 'bg-indigo-600' : 'bg-gray-200'
+                    }`}>
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        isDarkMode ? 'translate-x-6' : 'translate-x-1'
+                        }`} />
+                    </button>
+                    </div>
+                </div>
+                </aside>
             );
         };
-
-        // components/DocumentSummarizer.tsx
-        const DocumentSummarizer = () => {
-          const [text, setText] = useState('');
-          const [summary, setSummary] = useState('');
-          const [isLoading, setIsLoading] = useState(false);
-          const [error, setError] = useState('');
-
-          const handleSummarize = useCallback(async () => {
-            if (!text.trim()) {
-              setError('Please enter some text to summarize.');
-              return;
-            }
-            setIsLoading(true);
-            setError('');
-            setSummary('');
-            try {
-              const result = await summarizeText(text);
-              setSummary(result);
-            } catch (err) {
-              setError(err instanceof Error ? `Failed to get summary: ${err.message}` : 'An unknown error occurred.');
-              console.error(err);
-            } finally {
-              setIsLoading(false);
-            }
-          }, [text]);
-
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "Document Summarizer"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Get a concise summary of any text using Gemini.")
-              ),
-              React.createElement('div', { className: "flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden" },
-                React.createElement('div', { className: "flex flex-col h-full" },
-                  React.createElement('div', { className: "flex-1 flex flex-col" },
-                    React.createElement('label', { htmlFor: "text-input", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Your Text"),
-                    React.createElement('textarea', { id: "text-input", value: text, onChange: (e) => setText(e.target.value), placeholder: "Paste your document or text here...", className: "flex-1 w-full p-3 font-sans text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500" })
-                  ),
-                  React.createElement('div', { className: "mt-4" },
-                    React.createElement('button', { onClick: handleSummarize, disabled: isLoading, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition-colors" },
-                      isLoading ? 'Summarizing...' : 'Summarize Text'
-                    )
-                  )
-                ),
-                React.createElement('div', { className: "flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700" },
-                  React.createElement('h2', { className: "text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0" }, "Summary"),
-                  React.createElement('div', { className: "flex-1 overflow-y-auto p-4" },
-                    React.createElement(ReviewOutput, { review: summary, isLoading: isLoading, error: error })
-                  )
-                )
-              )
-            )
-          );
-        };
-
-        // components/UnitConverter.tsx
-        const UnitConverter = () => {
-          const conversions = {
-            length: { meter: 1, kilometer: 1000, centimeter: 0.01, millimeter: 0.001, mile: 1609.34, yard: 0.9144, foot: 0.3048, inch: 0.0254, },
-            mass: { gram: 1, kilogram: 1000, milligram: 0.001, pound: 453.592, ounce: 28.3495, },
-            temperature: { celsius: (c) => c, fahrenheit: (f) => (f - 32) * 5/9, kelvin: (k) => k - 273.15, },
-          };
-          const tempOutputConversions = { celsius: (c) => c, fahrenheit: (c) => (c * 9/5) + 32, kelvin: (c) => c + 273.15, };
-
-          const [category, setCategory] = useState('length');
-          const [inputValue, setInputValue] = useState('1');
-          const [fromUnit, setFromUnit] = useState('meter');
-          const [toUnit, setToUnit] = useState('foot');
-
-          const handleCategoryChange = (e) => {
-            const newCategory = e.target.value;
-            setCategory(newCategory);
-            const units = Object.keys(conversions[newCategory]);
-            setFromUnit(units[0]);
-            setToUnit(units[1] || units[0]);
-            setInputValue('1');
-          };
-
-          const outputValue = useMemo(() => {
-            const inputNum = parseFloat(inputValue);
-            if (isNaN(inputNum)) return '';
-            if (category === 'temperature') {
-              const baseValue = conversions.temperature[fromUnit](inputNum);
-              return tempOutputConversions[toUnit](baseValue).toFixed(2);
-            } else {
-              const categoryUnits = conversions[category];
-              const baseValue = inputNum * categoryUnits[fromUnit];
-              return (baseValue / categoryUnits[toUnit]).toFixed(5);
-            }
-          }, [inputValue, fromUnit, toUnit, category]);
-          
-          const units = Object.keys(conversions[category]);
-
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "Unit Converter"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Quickly convert between different units.")
-              ),
-              React.createElement('div', { className: "flex-1 flex items-center justify-center" },
-                React.createElement('div', { className: "w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700" },
-                  React.createElement('div', null,
-                    React.createElement('label', { htmlFor: "category", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Category"),
-                    React.createElement('select', { id: "category", value: category, onChange: handleCategoryChange, className: "w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize" },
-                      Object.keys(conversions).map(cat => React.createElement('option', { key: cat, value: cat }, cat))
-                    )
-                  ),
-                  React.createElement('div', { className: "flex items-center gap-4" },
-                    React.createElement('div', { className: "flex-1" },
-                      React.createElement('label', { htmlFor: "fromUnit", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "From"),
-                      React.createElement('select', { id: "fromUnit", value: fromUnit, onChange: e => setFromUnit(e.target.value), className: "w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize" },
-                        units.map(unit => React.createElement('option', { key: unit, value: unit }, unit))
-                      )
-                    ),
-                    React.createElement('div', { className: "flex-1" },
-                      React.createElement('label', { htmlFor: "toUnit", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "To"),
-                      React.createElement('select', { id: "toUnit", value: toUnit, onChange: e => setToUnit(e.target.value), className: "w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 capitalize" },
-                        units.map(unit => React.createElement('option', { key: unit, value: unit }, unit))
-                      )
-                    )
-                  ),
-                  React.createElement('div', null,
-                      React.createElement('label', { htmlFor: "inputValue", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Input"),
-                      React.createElement('input', { type: "number", id: "inputValue", value: inputValue, onChange: e => setInputValue(e.target.value), className: "w-full p-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" })
-                  ),
-                  React.createElement('div', null,
-                      React.createElement('p', { className: "text-lg font-medium text-slate-700 dark:text-slate-300" }, "Result:"),
-                      React.createElement('p', { className: "text-3xl font-bold text-indigo-600 dark:text-indigo-400 break-all" }, outputValue)
-                  )
-                )
-              )
-            )
-          );
-        };
-
-        // components/JsonFormatter.tsx
-        const JsonFormatter = () => {
-          const [jsonInput, setJsonInput] = useState('');
-          const [formattedJson, setFormattedJson] = useState('');
-          const [error, setError] = useState('');
-
-          const handleFormat = useCallback(() => {
-            if (!jsonInput.trim()) {
-              setError('Please enter some JSON to format.');
-              setFormattedJson('');
-              return;
-            }
-            try {
-              const formatted = JSON.stringify(JSON.parse(jsonInput), null, 2);
-              setFormattedJson(formatted);
-              setError('');
-            } catch (e) {
-              setError(e instanceof Error ? `Invalid JSON: ${e.message}` : 'An unknown error occurred.');
-              setFormattedJson('');
-            }
-          }, [jsonInput]);
-
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "JSON Formatter"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Paste your JSON data to validate and format it instantly.")
-              ),
-              React.createElement('div', { className: "flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 overflow-hidden" },
-                React.createElement('div', { className: "flex flex-col h-full" },
-                  React.createElement('div', { className: "flex-1 flex flex-col" },
-                    React.createElement('label', { htmlFor: "json-input", className: "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" }, "Your JSON"),
-                    React.createElement('textarea', { id: "json-input", value: jsonInput, onChange: (e) => setJsonInput(e.target.value), placeholder: '{ "key": "value", "nested": { "number": 123 } }', className: "flex-1 w-full p-3 font-mono text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md resize-none focus:ring-indigo-500 focus:border-indigo-500", spellCheck: "false" })
-                  ),
-                  React.createElement('div', { className: "mt-4" },
-                    React.createElement('button', { onClick: handleFormat, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" }, "Format JSON")
-                  )
-                ),
-                React.createElement('div', { className: "flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700" },
-                  React.createElement('h2', { className: "text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0" }, "Formatted Output"),
-                  React.createElement('div', { className: "flex-1 overflow-auto p-4" },
-                    error && React.createElement('div', { className: "text-center text-red-500 bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 rounded-md p-4" }, React.createElement('p', { className: "font-semibold" }, "Error"), React.createElement('p', { className: "text-sm" }, error)),
-                    !error && formattedJson && React.createElement('pre', { className: "text-sm font-mono whitespace-pre-wrap break-all" }, React.createElement('code', null, formattedJson)),
-                    !error && !formattedJson && React.createElement('p', { className: "text-slate-500 dark:text-slate-400 text-center" }, "Your formatted JSON will appear here.")
-                  )
-                )
-              )
-            )
-          );
-        };
-
-        // components/RegexTester.tsx
-        const RegexTester = () => {
-          const [pattern, setPattern] = useState('\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b');
-          const [flags, setFlags] = useState({ g: true, i: true, m: false });
-          const [testString, setTestString] = useState('Contact us at support@example.com or sales@example.org for more info.');
-          
-          const { matches, error } = useMemo(() => {
-            if (!pattern) return { matches: [], error: null };
-            try {
-              const flagsString = Object.keys(flags).filter(f => flags[f]).join('');
-              const regex = new RegExp(pattern, flagsString);
-              return { matches: Array.from(testString.matchAll(regex)), error: null };
-            } catch (e) {
-              return { matches: [], error: e.message };
-            }
-          }, [pattern, flags, testString]);
-
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "Regex Tester"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Test your regular expressions in real-time.")
-              ),
-              React.createElement('div', { className: "flex-1 flex flex-col overflow-hidden gap-4" },
-                React.createElement('div', { className: "flex gap-4" },
-                  React.createElement('div', { className: "flex-1" },
-                    React.createElement('label', { htmlFor: "pattern", className: "text-sm font-medium text-slate-700 dark:text-slate-300" }, "Regular Expression"),
-                    React.createElement('input', { id: "pattern", type: "text", value: pattern, onChange: e => setPattern(e.target.value), className: `w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${error ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'}` })
-                  ),
-                  React.createElement('div', { className: "flex items-end gap-4" },
-                    Object.keys(flags).map(flag => React.createElement('label', { key: flag, className: "flex items-center gap-2 cursor-pointer" },
-                      React.createElement('input', { type: "checkbox", checked: flags[flag], onChange: () => setFlags(prev => ({ ...prev, [flag]: !prev[flag] })), className: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" }),
-                      React.createElement('span', { className: "font-mono text-sm" }, flag)
-                    ))
-                  )
-                ),
-                error && React.createElement('p', { className: "text-red-500 text-sm" }, error),
-                React.createElement('div', null,
-                  React.createElement('label', { htmlFor: "testString", className: "text-sm font-medium text-slate-700 dark:text-slate-300" }, "Test String"),
-                  React.createElement('textarea', { id: "testString", value: testString, onChange: e => setTestString(e.target.value), className: "w-full p-2 mt-1 font-mono text-sm bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md resize-y focus:ring-indigo-500 focus:border-indigo-500 h-32" })
-                ),
-                React.createElement('div', { className: "flex-1 flex flex-col bg-slate-50 dark:bg-slate-900/70 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700" },
-                  React.createElement('h2', { className: "text-lg font-semibold text-slate-800 dark:text-white p-4 border-b border-slate-200 dark:border-slate-700 shrink-0" }, `Matches (${matches.length})`),
-                  React.createElement('div', { className: "flex-1 overflow-y-auto p-4" },
-                    matches.length > 0 ? (
-                      React.createElement('ul', { className: "space-y-2" }, matches.map((match, i) => React.createElement('li', { key: i, className: "p-2 bg-slate-100 dark:bg-slate-800 rounded-md" },
-                        React.createElement('span', { className: "font-mono text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/50 px-1 py-0.5 rounded" }, match[0]),
-                        React.createElement('span', { className: "text-xs text-slate-500 ml-2" }, `(index: ${match.index})`)
-                      )))
-                    ) : (React.createElement('p', { className: "text-slate-500 dark:text-slate-400 text-center" }, "No matches found."))
-                  )
-                )
-              )
-            )
-          );
-        };
+        // --- END OF components/Sidebar.tsx ---
         
-        // components/PasswordGenerator.tsx
-        const PasswordGenerator = () => {
-          const charset = { lowercase: 'abcdefghijklmnopqrstuvwxyz', uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', numbers: '0123456789', symbols: '!@#$%^&*()_+~`|}{[]:;?><,./-=' };
-          const [password, setPassword] = useState('');
-          const [length, setLength] = useState(16);
-          const [options, setOptions] = useState({ uppercase: true, numbers: true, symbols: true });
-          const [copied, setCopied] = useState(false);
-
-          const generatePassword = useCallback(() => {
-            let availableChars = charset.lowercase;
-            if (options.uppercase) availableChars += charset.uppercase;
-            if (options.numbers) availableChars += charset.numbers;
-            if (options.symbols) availableChars += charset.symbols;
-            let newPassword = '';
-            for (let i = 0; i < length; i++) {
-              newPassword += availableChars[Math.floor(Math.random() * availableChars.length)];
-            }
-            setPassword(newPassword);
-            setCopied(false);
-          }, [length, options]);
-
-          useEffect(() => {
-            generatePassword();
-          }, [generatePassword]);
-          
-          const handleCopy = () => {
-            navigator.clipboard.writeText(password);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-          };
-          
-          return (
-            React.createElement(React.Fragment, null,
-              React.createElement('header', { className: "mb-6" },
-                React.createElement('h1', { className: "text-3xl font-bold text-slate-900 dark:text-white" }, "Password Generator"),
-                React.createElement('p', { className: "text-slate-500 dark:text-slate-400 mt-1" }, "Create strong, secure, and random passwords.")
-              ),
-              React.createElement('div', { className: "flex-1 flex items-center justify-center" },
-                React.createElement('div', { className: "w-full max-w-lg p-8 space-y-6 bg-slate-50 dark:bg-slate-900/70 rounded-lg border border-slate-200 dark:border-slate-700" },
-                  React.createElement('div', { className: "relative" },
-                    React.createElement('input', { type: "text", value: password, readOnly: true, className: "w-full p-4 font-mono text-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md pr-24", 'aria-label': "Generated Password" }),
-                    React.createElement('button', { onClick: handleCopy, className: "absolute inset-y-0 right-0 px-4 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200" }, copied ? 'Copied!' : 'Copy')
-                  ),
-                  React.createElement('div', { className: "space-y-4" },
-                    React.createElement('div', { className: "flex items-center justify-between" },
-                      React.createElement('label', { htmlFor: "length", className: "font-medium" }, "Password Length"),
-                      React.createElement('span', { className: "text-lg font-bold text-indigo-600 dark:text-indigo-400" }, length)
-                    ),
-                    React.createElement('input', { id: "length", type: "range", min: "8", max: "64", value: length, onChange: e => setLength(parseInt(e.target.value)), className: "w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer" })
-                  ),
-                  React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-3 gap-4" },
-                    Object.keys(options).map(opt => React.createElement('label', { key: opt, className: "flex items-center gap-2 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md cursor-pointer" },
-                      React.createElement('input', { type: "checkbox", checked: options[opt], onChange: () => setOptions(prev => ({...prev, [opt]: !prev[opt]})), className: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" }),
-                      React.createElement('span', { className: 'capitalize' }, opt)
-                    ))
-                  ),
-                   React.createElement('button', { onClick: generatePassword, className: "w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" }, "Generate New Password")
-                )
-              )
-            )
-          );
-        };
-        
-        // components/Sidebar.tsx
-        const Sidebar = ({ isDarkMode, setIsDarkMode, activeTool, onNavClick, apiKey, onApiKeySave }) => {
-          const navItems = [
-            { name: 'Code Reviewer', icon: CodeIcon },
-            { name: 'Image Generator', icon: DocumentIcon },
-            { name: 'Image Compressor', icon: CompressIcon },
-            { name: 'Document Summarizer', icon: DocumentIcon },
-            { name: 'Unit Converter', icon: CalculatorIcon },
-            { name: 'JSON Formatter', icon: TextIcon },
-            { name: 'Regex Tester', icon: DeveloperIcon },
-            { name: 'Password Generator', icon: ToolsIcon },
-          ];
-          const [localApiKey, setLocalApiKey] = useState(apiKey);
-          const [showSaved, setShowSaved] = useState(false);
-
-          useEffect(() => { setLocalApiKey(apiKey); }, [apiKey]);
-          
-          const handleSaveClick = () => {
-            onApiKeySave(localApiKey);
-            setShowSaved(true);
-            setTimeout(() => setShowSaved(false), 2000);
-          };
-
-          return (
-            React.createElement('aside', { className: "w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex flex-col p-4 h-full" },
-              React.createElement('div', { className: "flex items-center gap-2 p-4 border-b border-slate-200 dark:border-slate-700" },
-                React.createElement(LogoIcon, { className: "w-8 h-8 text-indigo-600" }),
-                React.createElement('h1', { className: "text-xl font-bold text-slate-800 dark:text-white" }, "OmniTools")
-              ),
-              React.createElement('nav', { className: "flex-1 mt-4 overflow-y-auto" },
-                React.createElement('ul', null,
-                  navItems.map((item) => {
-                    const isActive = item.name === activeTool;
-                    return (
-                      React.createElement('li', { key: item.name },
-                        React.createElement('button', { onClick: () => onNavClick(item.name), className: `flex items-center gap-3 px-4 py-2 my-1 rounded-lg transition-colors w-full text-left ${isActive ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`, 'aria-current': isActive ? 'page' : undefined },
-                          React.createElement(item.icon, { className: "w-5 h-5" }),
-                          React.createElement('span', { className: "font-medium text-sm" }, item.name),
-                          isActive && React.createElement('div', { className: "w-1 h-4 bg-indigo-500 rounded-full ml-auto" })
-                        )
-                      )
-                    );
-                  })
-                )
-              ),
-              React.createElement('div', { className: "mt-auto p-4 border-t border-slate-200 dark:border-slate-700 space-y-4" },
-                React.createElement('div', null,
-                  React.createElement('label', { htmlFor: "api-key", className: "block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1" }, "Gemini API Key"),
-                  React.createElement('div', { className: "flex gap-2" },
-                    React.createElement('input', { id: "api-key", type: "password", value: localApiKey, onChange: (e) => setLocalApiKey(e.target.value), placeholder: "Enter your API key", className: "flex-1 w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm p-1.5 text-xs focus:ring-indigo-500 focus:border-indigo-500" }),
-                    React.createElement('button', { onClick: handleSaveClick, className: "px-3 py-1 text-xs font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" }, showSaved ? 'Saved!' : 'Save')
-                  )
-                ),
-                React.createElement('div', { className: "flex items-center justify-between" },
-                  React.createElement('span', { className: "text-sm font-medium text-slate-600 dark:text-slate-400" }, "Dark Mode"),
-                  React.createElement('button', { onClick: () => setIsDarkMode(!isDarkMode), 'aria-pressed': isDarkMode, className: `relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isDarkMode ? 'bg-indigo-600' : 'bg-gray-200'}` },
-                    React.createElement('span', { className: `inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDarkMode ? 'translate-x-6' : 'translate-x-1'}` })
-                  )
-                )
-              )
-            )
-          );
-        };
-        
-        // App.tsx
+        // --- START OF App.tsx ---
         const App = () => {
-          const POPUP_AD_TRIGGER_COUNT = 3;
-          const AI_TOOLS = ['Code Reviewer', 'Image Generator', 'Document Summarizer'];
-          const DEFAULT_API_KEY = "AIzaSyA-m-Ka093qVIYzwP7Haj3_TA0IcRiD-jc";
+            const POPUP_AD_TRIGGER_COUNT = 3;
+            const AI_TOOLS = ['Code Reviewer', 'Image Generator', 'Document Summarizer'];
+            const DEFAULT_API_KEY = "AIzaSyA-m-Ka093qVIYzwP7Haj3_TA0IcRiD-jc";
 
-          const [isDarkMode, setIsDarkMode] = useState(false);
-          const [activeTool, setActiveTool] = useState('Code Reviewer');
-          const [isPopupVisible, setPopupVisible] = useState(false);
-          const [navigationCount, setNavigationCount] = useState(0);
-          const [apiKey, setApiKey] = useState('');
+            const [isDarkMode, setIsDarkMode] = useState(false);
+            const [activeTool, setActiveTool] = useState('Code Reviewer');
+            const [isPopupVisible, setPopupVisible] = useState(false);
+            const [navigationCount, setNavigationCount] = useState(0);
+            const [apiKey, setApiKey] = useState('');
 
-          useEffect(() => {
-            const storedKey = localStorage.getItem('gemini-api-key');
-            setApiKey(storedKey || DEFAULT_API_KEY);
-            if (!storedKey) {
-                localStorage.setItem('gemini-api-key', DEFAULT_API_KEY);
-            }
-            setIsDarkMode(localStorage.getItem('dark-mode') === 'true');
-          }, []);
+            // Helper functions for safe localStorage access
+            const safeLocalStorageGet = (key, fallback) => {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item === null ? fallback : item;
+                } catch (e) {
+                    console.warn(`Could not read from localStorage: ${key}`, e);
+                    return fallback;
+                }
+            };
 
-          useEffect(() => {
-            if (apiKey) {
-              initializeGemini(apiKey);
-            }
-          }, [apiKey]);
-          
-          useEffect(() => {
-            if (isDarkMode) {
-              document.documentElement.classList.add('dark');
-              localStorage.setItem('dark-mode', 'true');
-            } else {
-              document.documentElement.classList.remove('dark');
-              localStorage.setItem('dark-mode', 'false');
-            }
-          }, [isDarkMode]);
+            const safeLocalStorageSet = (key, value) => {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    console.warn(`Could not write to localStorage: ${key}`, e);
+                }
+            };
 
-          const handleApiKeySave = (newKey) => {
-            setApiKey(newKey);
-            localStorage.setItem('gemini-api-key', newKey);
-          };
+            useEffect(() => {
+                const storedKey = safeLocalStorageGet('gemini-api-key', null);
+                if (storedKey) {
+                    setApiKey(storedKey);
+                } else {
+                    setApiKey(DEFAULT_API_KEY);
+                    safeLocalStorageSet('gemini-api-key', DEFAULT_API_KEY);
+                }
+                
+                const storedDarkMode = safeLocalStorageGet('dark-mode', 'false') === 'true';
+                setIsDarkMode(storedDarkMode);
 
-          const handleNavClick = useCallback((toolName) => {
-            setActiveTool(toolName);
-            const newNavCount = navigationCount + 1;
-            setNavigationCount(newNavCount);
+            }, []);
 
-            if (newNavCount >= POPUP_AD_TRIGGER_COUNT) {
-              setPopupVisible(true);
-              setNavigationCount(0);
-            }
-          }, [navigationCount]);
+            useEffect(() => {
+                if (apiKey) {
+                    initializeGemini(apiKey);
+                }
+            }, [apiKey]);
+            
+            useEffect(() => {
+                if (isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                safeLocalStorageSet('dark-mode', isDarkMode);
+            }, [isDarkMode]);
 
-          const renderTool = () => {
-            if (AI_TOOLS.includes(activeTool) && !apiKey) {
-              return React.createElement(ApiKeyPrompt);
-            }
-            switch (activeTool) {
-              case 'Code Reviewer': return React.createElement(CodeReviewer);
-              case 'Image Generator': return React.createElement(ImageGenerator);
-              case 'Image Compressor': return React.createElement(ImageCompressor);
-              case 'Document Summarizer': return React.createElement(DocumentSummarizer);
-              case 'Unit Converter': return React.createElement(UnitConverter);
-              case 'JSON Formatter': return React.createElement(JsonFormatter);
-              case 'Regex Tester': return React.createElement(RegexTester);
-              case 'Password Generator': return React.createElement(PasswordGenerator);
-              default: return React.createElement(CodeReviewer);
-            }
-          };
+            const handleApiKeySave = (newKey) => {
+                setApiKey(newKey);
+                safeLocalStorageSet('gemini-api-key', newKey);
+            };
 
-          return (
-            React.createElement('div', { className: `flex h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-300 ${isDarkMode ? 'dark' : ''}` },
-              React.createElement('div', { className: "p-4" },
-                React.createElement(Sidebar, { isDarkMode, setIsDarkMode, activeTool, onNavClick: handleNavClick, apiKey, onApiKeySave: handleApiKeySave })
-              ),
-              React.createElement('main', { className: "flex-1 flex flex-col p-8 overflow-hidden" },
-                React.createElement('div', { className: "bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex-1 flex flex-col overflow-hidden" },
-                  React.createElement(BannerAd, { slotId: adsConfig.topBanner }),
-                  React.createElement('div', { className: "flex-1 p-8 overflow-hidden flex flex-col" }, renderTool()),
-                  React.createElement(BannerAd, { slotId: adsConfig.bottomBanner })
-                )
-              ),
-              React.createElement(PopupAd, { slotId: adsConfig.popup, isOpen: isPopupVisible, onClose: () => setPopupVisible(false) })
-            )
-          );
-        };
+            const handleNavClick = useCallback((toolName) => {
+                setActiveTool(toolName);
+                const newNavCount = navigationCount + 1;
+                setNavigationCount(newNavCount);
 
-        // index.tsx (Entry point)
+                if (newNavCount >= POPUP_AD_TRIGGER_COUNT) {
+                setPopupVisible(true);
+                setNavigationCount(0);
+                }
+            }, [navigationCount]);
+
+            const handleClosePopup = () => {
+                setPopupVisible(false);
+            };
+
+            const renderTool = () => {
+                if (AI_TOOLS.includes(activeTool) && !apiKey) {
+                return <ApiKeyPrompt />;
+                }
+
+                switch (activeTool) {
+                case 'Code Reviewer':
+                    return <CodeReviewer />;
+                case 'Image Generator':
+                    return <ImageGenerator />;
+                case 'Image Compressor':
+                    return <ImageCompressor />;
+                case 'Document Summarizer':
+                    return <DocumentSummarizer />;
+                case 'Unit Converter':
+                    return <UnitConverter />;
+                case 'JSON Formatter':
+                    return <JsonFormatter />;
+                case 'Regex Tester':
+                    return <RegexTester />;
+                case 'Password Generator':
+                    return <PasswordGenerator />;
+                default:
+                    return <CodeReviewer />;
+                }
+            };
+
+            return (
+                <div className={`flex h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+                <div className="p-4">
+                    <Sidebar 
+                    isDarkMode={isDarkMode} 
+                    setIsDarkMode={setIsDarkMode} 
+                    activeTool={activeTool} 
+                    onNavClick={handleNavClick}
+                    apiKey={apiKey}
+                    onApiKeySave={handleApiKeySave}
+                    />
+                </div>
+                <main className="flex-1 flex flex-col p-8 overflow-hidden">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg flex-1 flex flex-col overflow-hidden">
+                    <BannerAd slotId={adsConfig.topBanner} />
+                    <div className="flex-1 p-8 overflow-y-auto flex flex-col">
+                        {renderTool()}
+                    </div>
+                    <BannerAd slotId={adsConfig.bottomBanner} />
+                    </div>
+                </main>
+                <PopupAd 
+                    slotId={adsConfig.popup} 
+                    isOpen={isPopupVisible} 
+                    onClose={handleClosePopup} 
+                />
+                </div>
+            );
+        }
+        // --- END OF App.tsx ---
+
+        // --- START OF index.tsx ---
         const rootElement = document.getElementById('root');
         if (!rootElement) {
           throw new Error("Could not find root element to mount to");
         }
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(React.createElement(App));
 
-        // --- End: Consolidated Code ---
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        );
+        // --- END OF index.tsx ---
     </script>
 </body>
 </html>
